@@ -15,11 +15,12 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\Fixtures\Assets\CollectionFileExistsFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class GetRealTargetPathTest extends UnitTestCase
+final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: getRealTargetPath()

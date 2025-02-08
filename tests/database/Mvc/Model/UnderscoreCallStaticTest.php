@@ -14,13 +14,13 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Resultset;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class UnderscoreCallStaticTest extends DatabaseTestCase
+final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -41,7 +41,7 @@ final class UnderscoreCallStaticTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-10-14
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreCallStatic(): void
     {

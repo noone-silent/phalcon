@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\ValidateAll;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ValidateAllTest extends UnitTestCase
+final class ValidateAllTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Helper\Arr :: validateAll()

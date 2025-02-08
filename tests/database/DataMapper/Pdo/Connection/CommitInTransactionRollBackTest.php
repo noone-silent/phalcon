@@ -12,13 +12,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function date;
 use function uniqid;
 
-final class CommitInTransactionRollBackTest extends DatabaseTestCase
+final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection ::
@@ -26,7 +26,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionCommitInTransaction(): void
     {
@@ -45,7 +45,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
             . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
 
         $result = $connection->exec($sql);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $connection->commit();
 
@@ -62,7 +62,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
         ;
 
         $this->assertIsArray($all);
-        $this->assertEquals($invId, $all['inv_id']);
+        $this->assertSame($invId, $all['inv_id']);
     }
 
     /**
@@ -70,7 +70,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionRollBack(): void
     {
@@ -89,7 +89,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
             . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
 
         $result = $connection->exec($sql);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         /**
          * Committed record

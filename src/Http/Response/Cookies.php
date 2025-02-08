@@ -113,7 +113,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      */
     public function delete(string $name): bool
     {
-        if (true !== isset($this->cookies[$name])) {
+        if (!isset($this->cookies[$name])) {
             return false;
         }
 
@@ -184,7 +184,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      */
     public function has(string $name): bool
     {
-        return (isset($this->cookies[$name]) || isset($_COOKIE[$name]));
+        return isset($this->cookies[$name]) || isset($_COOKIE[$name]);
     }
 
     /**
@@ -265,15 +265,15 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         mixed $value = null,
         int $expire = 0,
         string $path = '/',
-        bool $secure = null,
-        string $domain = null,
-        bool $httpOnly = null,
+        bool $secure = false,
+        string $domain = '',
+        bool $httpOnly = false,
         array $options = []
     ): CookiesInterface {
         /**
          * Check if the cookie needs to be updated or
          */
-        if (true !== isset($this->cookies[$name])) {
+        if (!isset($this->cookies[$name])) {
             $cookie = new Cookie(
                 $name,
                 $value,
@@ -355,7 +355,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @return CookiesInterface
      * @see \Phalcon\Encryption\Security\Random
      */
-    public function setSignKey(string $signKey = null): CookiesInterface
+    public function setSignKey(?string $signKey = null): CookiesInterface
     {
         $this->signKey = $signKey;
 

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Annotations\Annotation;
 
 use Phalcon\Annotations\Annotation;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetArgumentTest extends UnitTestCase
+final class GetArgumentTest extends AbstractUnitTestCase
 {
     private $PHANNOT_T_STRING = 303;
 
@@ -49,7 +49,7 @@ final class GetArgumentTest extends UnitTestCase
             ],
         ]);
 
-        $this->assertSame($annotation->getArgument(0), $value);
-        $this->assertSame($annotation->getArgument(1), $value1);
+        $this->assertSame($value, $annotation->getArgument(0));
+        $this->assertSame($value1, $annotation->getArgument(1));
     }
 }

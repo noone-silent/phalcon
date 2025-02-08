@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\Model\Transaction\Manager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -25,7 +25,7 @@ use Phalcon\Tests\Models\Invoices;
 use function date;
 use function uniqid;
 
-final class DeleteTest extends DatabaseTestCase
+final class DeleteTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -41,7 +41,7 @@ final class DeleteTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDelete(): void
     {
@@ -71,7 +71,7 @@ final class DeleteTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-08-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteCascadeRelated(): void
     {
@@ -142,7 +142,7 @@ final class DeleteTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-11-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteGetRelated(): void
     {
@@ -267,7 +267,7 @@ final class DeleteTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteRestrictRelated(): void
     {
@@ -322,7 +322,7 @@ final class DeleteTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteRestrictRelatedInTransaction(): void
     {

@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Manager;
 
 use Phalcon\Mvc\Model\ManagerInterface;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function spl_object_hash;
 
-final class CreateBuilderTest extends DatabaseTestCase
+final class CreateBuilderTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -29,8 +29,8 @@ final class CreateBuilderTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-07-04
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelManagerCreateBuilder(): void
     {

@@ -17,14 +17,14 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\Orders;
 use Phalcon\Tests\Models\Products;
 
-final class JoinTest extends DatabaseTestCase
+final class JoinTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -42,7 +42,7 @@ final class JoinTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaJoin(): void
     {
@@ -73,8 +73,8 @@ final class JoinTest extends DatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-02-06
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelCriteriaJoinManyToManyMultipleSchema(): void
     {

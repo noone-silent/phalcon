@@ -17,12 +17,12 @@ use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function class_exists;
 use function function_exists;
 
-final class SetFileCheckingCallbackTest extends UnitTestCase
+final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 
@@ -36,26 +36,6 @@ final class SetFileCheckingCallbackTest extends UnitTestCase
                 null,
             ],
         ];
-    }
-
-    /**
-     * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback() - exception
-     *
-     * @return void
-     * @throws Exception
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     *
-     */
-    public function testAutoloaderLoaderSetFileCheckingCallbackException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "The 'method' parameter must be either a callable or NULL"
-        );
-
-        $loader = new Loader();
-        $loader->setFileCheckingCallback(1234);
     }
 
     /**

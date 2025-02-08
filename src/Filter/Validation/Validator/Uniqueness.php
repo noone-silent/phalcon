@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
 use Phalcon\Filter\Validation\Exception;
+use Phalcon\Mvc\Model;
 use Phalcon\Mvc\ModelInterface;
 
 use function array_keys;
@@ -25,9 +26,6 @@ use function is_array;
 use function is_object;
 use function join;
 use function range;
-
-//use Phalcon\Mvc\CollectionInterface;
-//use Phalcon\Mvc\Collection;
 
 /**
  * Check that a field is unique in the related table
@@ -145,7 +143,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     {
         // Caching columnMap
         $columnRenaming = (bool)ini_get("orm.column_renaming");
-        if (true === $columnRenaming && true === empty($this->columnMap)) {
+        if (true === $columnRenaming && empty($this->columnMap)) {
             $this->columnMap = $record
                 ->getDI()
                 ->getShared("modelsMetadata")
@@ -153,7 +151,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             ;
         }
 
-        if (true === isset($this->columnMap[$field])) {
+        if (isset($this->columnMap[$field])) {
             return $this->columnMap[$field];
         }
 
@@ -176,7 +174,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 //
 //        var isDocument;
 
-        if (true !== is_array($field)) {
+        if (!is_array($field)) {
             $field = [$field];
         }
 
@@ -190,18 +188,19 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         if (null !== $convert) {
             $values = $convert($values);
 
-            if (true !== is_array($values)) {
+            if (!is_array($values)) {
                 throw new Exception("Value conversion must return an array");
             }
         }
 
+        /** @var Model|null $record */
         $record = $this->getOption("model");
 
-        if (true === empty($record) || true !== is_object($record)) {
+        if (empty($record) || !is_object($record)) {
             // check validation getEntity() method
             $record = $validation->getEntity();
 
-            if (true === empty($record)) {
+            if (empty($record)) {
                 throw new Exception(
                     "Model of record must be set to property \"model\""
                 );
@@ -233,7 +232,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 //            );
         }
 
-        /** @var ModelInterface $className */
+        /** @var Model $className */
         $className = get_class($record);
 
         return $className::count($params) === 0;
@@ -374,7 +373,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
                             $exceptConditions[] = $attribute
                                 . " NOT IN ("
-                                . join(",", $notInValues)
+                                . implode(",", $notInValues)
                                 . ")";
                         } else {
                             $exceptConditions[] = $attribute . " <> ?" . $index;
@@ -397,7 +396,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
                         $exceptConditions[] = $attribute
                             . " NOT IN ("
-                            . join(",", $notInValues)
+                            . implode(",", $notInValues)
                             . ")";
                     } else {
                         $params["conditions"][] = $attribute . " <> ?" . $index;
@@ -420,7 +419,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
                             $exceptConditions[] = $attribute
                                 . " NOT IN ("
-                                . join(",", $notInValues)
+                                . implode(",", $notInValues)
                                 . ")";
                         } else {
                             $params["conditions"][] = $attribute . " <> ?" . $index;
@@ -457,13 +456,13 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             }
         }
 
-        if (true !== empty($exceptConditions)) {
+        if (!empty($exceptConditions)) {
             $params["conditions"][] = "("
-                . join(" OR ", $exceptConditions)
+                . implode(" OR ", $exceptConditions)
                 . ")";
         }
 
-        $params["conditions"] = join(
+        $params["conditions"] = implode(
             " AND ",
             $params["conditions"]
         );

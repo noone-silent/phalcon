@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Group;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class GroupTest extends UnitTestCase
+final class GroupTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Helper\Arr :: group()

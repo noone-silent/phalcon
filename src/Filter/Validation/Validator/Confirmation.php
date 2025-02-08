@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Di\Exception as DiException;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exception;
@@ -76,6 +77,7 @@ class Confirmation extends AbstractValidator
      *
      * @return bool
      * @throws Exception
+     * @throws DiException
      */
     public function validate(Validation $validation, string $field): bool
     {
@@ -89,7 +91,7 @@ class Confirmation extends AbstractValidator
                 $field
             );
 
-            if (true === empty($labelWith)) {
+            if (empty($labelWith)) {
                 $labelWith = $validation->getLabel($fieldWith);
             }
 
@@ -114,18 +116,10 @@ class Confirmation extends AbstractValidator
      * @param string $target
      *
      * @return bool
-     * @throws Exception
      */
     final protected function compare(string $source, string $target): bool
     {
         if (true === $this->getOption("ignoreCase", false)) {
-            /**
-             * mbstring is required here
-             */
-            if (true !== $this->phpFunctionExists("mb_strtolower")) {
-                throw new Exception("Extension 'mbstring' is required");
-            }
-
             $source = mb_strtolower($source, "utf-8");
             $target = mb_strtolower($target, "utf-8");
         }

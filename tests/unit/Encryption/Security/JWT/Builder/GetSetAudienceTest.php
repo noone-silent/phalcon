@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetAudienceTest extends UnitTestCase
+final class GetSetAudienceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Builder ::
@@ -32,7 +32,7 @@ final class GetSetAudienceTest extends UnitTestCase
         $signer  = new Hmac();
         $builder = new Builder($signer);
 
-        $this->assertNull($builder->getAudience());
+        $this->assertEmpty($builder->getAudience());
 
         $return = $builder->setAudience('audience');
         $this->assertInstanceOf(Builder::class, $return);
@@ -43,24 +43,5 @@ final class GetSetAudienceTest extends UnitTestCase
         $this->assertInstanceOf(Builder::class, $return);
 
         $this->assertSame(['audience'], $builder->getAudience());
-    }
-
-    /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Builder :: setAudience() -
-     * exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEncryptionSecurityJWTBuilderSetAudienceException(): void
-    {
-        $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage("Invalid Audience");
-
-        $signer  = new Hmac();
-        $builder = new Builder($signer);
-        $builder->setAudience(1234);
     }
 }

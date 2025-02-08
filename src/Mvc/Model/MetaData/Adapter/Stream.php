@@ -15,8 +15,8 @@ namespace Phalcon\Mvc\Model\MetaData\Adapter;
 
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Support\Settings;
 use Phalcon\Support\Traits\FilePathTrait;
-use Phalcon\Support\Traits\IniTrait;
 
 use function array_key_exists;
 use function file_exists;
@@ -39,7 +39,6 @@ use function var_export;
  */
 class Stream extends MetaData
 {
-    use IniTrait;
     use FilePathTrait;
 
     /**
@@ -61,10 +60,14 @@ class Stream extends MetaData
 
     /**
      * Reads meta-data from files
+     *
+     * @param string|null $key
+     *
+     * @return array|null
      */
     public function read(?string $key): array | null
     {
-        if (true === is_null($key)) {
+        if (null === $key) {
             return null;
         }
         $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
@@ -85,14 +88,16 @@ class Stream extends MetaData
      */
     public function write(?string $key, array $data): void
     {
-        $option = $this->iniGetBool("orm.exception_on_failed_metadata_save");
+        $option = Settings::get('orm.exception_on_failed_metadata_save');
         try {
             $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
 
-            if (false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")) {
+            if (
+                false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")
+            ) {
                 $this->throwWriteException($option);
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->throwWriteException($option);
         }
     }

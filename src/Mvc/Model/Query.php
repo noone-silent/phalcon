@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use PDOException;
-use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -30,6 +29,8 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
+use Psr\SimpleCache\InvalidArgumentException;
+use Psr\SimpleCache\CacheInterface;
 
 use function array_merge;
 use function class_exists;
@@ -235,9 +236,9 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected array $bindTypes = [];
 
     /**
-     * @var mixed|null
+     * @var CacheInterface|null
      */
-    protected mixed $cache = null;
+    protected ?CacheInterface $cache = null;
 
     /**
      * @var array
@@ -426,10 +427,10 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             $cache = $this->container->getShared($cacheService);
 
-            if (true !== is_a($cache, "Phalcon\\Cache\\CacheInterface")) {
+            if (!$cache instanceof CacheInterface) {
                 throw new Exception(
                     "Cache service must be an object implementing " .
-                    "Phalcon\Cache\CacheInterface"
+                    "Psr\SimpleCache\CacheInterface"
                 );
             }
 
@@ -719,10 +720,10 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $this->type = $type;
 
                 $irPhql = match ($type) {
-                    self::PHQL_T_SELECT => $this->_prepareSelect(),
-                    self::PHQL_T_INSERT => $this->_prepareInsert(),
-                    self::PHQL_T_UPDATE => $this->_prepareUpdate(),
-                    self::PHQL_T_DELETE => $this->_prepareDelete(),
+                    self::PHQL_T_SELECT => $this->prepareSelect(),
+                    self::PHQL_T_INSERT => $this->prepareInsert(),
+                    self::PHQL_T_UPDATE => $this->prepareUpdate(),
+                    self::PHQL_T_DELETE => $this->prepareDelete(),
                     default             => throw new Exception(
                         "Unknown statement " . $type . ", when preparing: " . $phql
                     ),
@@ -895,7 +896,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareDelete(): array
+    final protected function prepareDelete(): array
     {
         $ast = $this->ast;
 
@@ -996,7 +997,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareInsert(): array
+    final protected function prepareInsert(): array
     {
         $ast = $this->ast;
 
@@ -1083,7 +1084,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareSelect(
+    final protected function prepareSelect(
         mixed $ast = null,
         bool $merge = false
     ): array {
@@ -1467,7 +1468,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareUpdate(): array
+    final protected function prepareUpdate(): array
     {
         $ast = $this->ast;
 
@@ -3039,7 +3040,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 case self::PHQL_T_SELECT:
                     $exprReturn = [
                         "type"  => "select",
-                        "value" => $this->_prepareSelect($expr, true),
+                        "value" => $this->prepareSelect($expr, true),
                     ];
 
                     break;

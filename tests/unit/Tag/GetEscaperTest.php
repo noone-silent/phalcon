@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use PHPUnit\Framework\Attributes\Test;
 
-class GetEscaperTest extends TagSetup
+class GetEscaperTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getEscaper()

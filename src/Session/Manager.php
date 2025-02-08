@@ -135,7 +135,7 @@ class Manager implements ManagerInterface
      */
     public function exists(): bool
     {
-        return (session_status() === self::SESSION_ACTIVE);
+        return session_status() === self::SESSION_ACTIVE;
     }
 
     /**
@@ -429,7 +429,7 @@ class Manager implements ManagerInterface
      */
     private function getUniqueKey(string $key): string
     {
-        $prefix = (true !== empty($this->uniqueId)) ? $this->uniqueId . '#' : '';
+        $prefix = (!empty($this->uniqueId)) ? $this->uniqueId . '#' : '';
 
         return $prefix . $key;
     }

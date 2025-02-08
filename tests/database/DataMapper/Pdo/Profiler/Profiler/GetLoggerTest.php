@@ -13,29 +13,29 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 
 use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetLoggerTest extends DatabaseTestCase
+final class GetLoggerTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler :: getLogger()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoProfilerProfilerGetLogger(): void
     {
         $profile = new Profiler();
         $logger  = $profile->getLogger();
 
-        $this->assertInstanceOf(MemoryLogger::class, $logger);
+        $this->assertNull($logger);
 
         $newLogger = new MemoryLogger();
         $profile   = new Profiler($newLogger);
 
         $logger = $profile->getLogger();
         $this->assertInstanceOf(MemoryLogger::class, $logger);
-        $this->assertEquals($newLogger, $logger);
+        $this->assertSame($newLogger, $logger);
     }
 }

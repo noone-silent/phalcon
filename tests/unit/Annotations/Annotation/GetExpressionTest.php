@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Annotations\Annotation;
 
 use Phalcon\Annotations\Annotation;
 use Phalcon\Annotations\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetExpressionTest extends UnitTestCase
+final class GetExpressionTest extends AbstractUnitTestCase
 {
     private int $PHANNOT_T_ANNOTATION = 300;
     private int $PHANNOT_T_STRING     = 303;
@@ -65,8 +65,8 @@ final class GetExpressionTest extends UnitTestCase
             'arguments' => $expr,
         ]);
 
-        $this->assertSame($annotation->getExpression($oneExpr), $value);
-        $this->assertSame($annotation->getExpression($twoExpr), $value1);
+        $this->assertSame($value, $annotation->getExpression($oneExpr));
+        $this->assertSame($value1, $annotation->getExpression($twoExpr));
         $this->assertInstanceOf(
             Annotation::class,
             $annotation->getExpression($threeExpr)

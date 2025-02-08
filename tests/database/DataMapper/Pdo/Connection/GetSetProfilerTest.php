@@ -13,30 +13,30 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetSetProfilerTest extends DatabaseTestCase
+final class GetSetProfilerTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: getProfiler()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionGetProfiler(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertInstanceOf(
-            Profiler::class,
-            $connection->getProfiler()
-        );
+        $actual = $connection->getProfiler();
+        $this->assertNull($actual);
 
         $profiler = new Profiler();
         $connection->setProfiler($profiler);
 
-        $this->assertSame($profiler, $connection->getProfiler());
+        $expected = $profiler;
+        $actual   = $connection->getProfiler();
+        $this->assertSame($expected, $actual);
     }
 }

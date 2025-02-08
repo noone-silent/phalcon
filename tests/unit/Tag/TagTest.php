@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class TagTest extends UnitTestCase
+class TagTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

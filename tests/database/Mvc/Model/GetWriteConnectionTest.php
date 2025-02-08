@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class GetWriteConnectionTest extends DatabaseTestCase
+final class GetWriteConnectionTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -33,7 +33,7 @@ final class GetWriteConnectionTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-31
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetWriteConnection(): void
     {

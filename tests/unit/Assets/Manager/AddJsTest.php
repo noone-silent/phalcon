@@ -17,11 +17,12 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class AddJsTest extends UnitTestCase
+final class AddJsTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Database\Mvc\Model\Resultset\Complex;
 
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 
-final class UnserializeTest extends DatabaseTestCase
+final class UnserializeTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -45,7 +45,7 @@ final class UnserializeTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelResultsetComplexUnserialize(): void
     {

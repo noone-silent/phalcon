@@ -16,14 +16,14 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models;
 use Phalcon\Tests\Models\Invoices;
 
-final class UnderscoreGetTest extends DatabaseTestCase
+final class UnderscoreGetTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -44,7 +44,7 @@ final class UnderscoreGetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGet(): void
     {
@@ -70,7 +70,7 @@ final class UnderscoreGetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGetDirtyRelated(): void
     {
@@ -131,7 +131,7 @@ final class UnderscoreGetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGetIsUsingGetters(): void
     {
@@ -170,7 +170,7 @@ final class UnderscoreGetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGetRelated(): void
     {
@@ -238,7 +238,7 @@ final class UnderscoreGetTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-24
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscorePrivateProperty(): void
     {
@@ -273,7 +273,7 @@ final class UnderscoreGetTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-24
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscorePrivatePropertyException(): void
     {

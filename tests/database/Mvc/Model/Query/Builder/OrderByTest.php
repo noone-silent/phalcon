@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query\Builder;
 
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class OrderByTest extends DatabaseTestCase
+final class OrderByTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -48,7 +48,7 @@ final class OrderByTest extends DatabaseTestCase
      * @since  2021-04-20
      * @issue  15411
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryBuilderOrderBy(): void
     {

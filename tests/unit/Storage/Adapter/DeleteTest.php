@@ -17,18 +17,20 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class DeleteTest extends UnitTestCase
+final class DeleteTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]
@@ -54,6 +56,11 @@ final class DeleteTest extends UnitTestCase
             [
                 Redis::class,
                 getOptionsRedis(),
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
                 'redis',
             ],
             [

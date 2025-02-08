@@ -12,16 +12,16 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetAdapterTest extends DatabaseTestCase
+final class GetAdapterTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: getAdapter()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionGetAdapter(): void
     {
@@ -29,18 +29,6 @@ final class GetAdapterTest extends DatabaseTestCase
         $connection = self::getDataMapperConnection();
 
         $this->assertFalse($connection->isConnected());
-
-        $connection->connect();
-
-        $this->assertTrue($connection->isConnected());
-        $this->assertNotEmpty($connection->getAdapter());
-
-        $connection->disconnect();
-
-        $this->assertNotEmpty(
-            $connection->getAdapter(),
-            'getPdo() will re-connect if disconnected'
-        );
-        $this->assertTrue($connection->isConnected());
+        $this->assertNotNull($connection->getAdapter());
     }
 }

@@ -15,9 +15,11 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -99,13 +101,12 @@ final class ConstructTest extends UnitTestCase
     /**
      * Tests Phalcon\Assets\Asset\Js :: __construct() - local
      *
-     * @dataProvider providerJs
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('providerJs')]
     public function testAssetsAssetJsConstructLocal(
         string $path,
         bool $local

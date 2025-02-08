@@ -19,11 +19,11 @@ use Phalcon\Config\Adapter\Grouped;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-use function supportDir;
+use function dataDir;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 

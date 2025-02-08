@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 use function file_get_contents;
 
-final class GetContentTest extends UnitTestCase
+final class GetContentTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Asset\Js :: getContent()

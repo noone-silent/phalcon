@@ -15,9 +15,10 @@ namespace Phalcon\Tests\Unit\Support\Version;
 
 use Phalcon\Support\Version;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetPartTest extends UnitTestCase
+final class GetPartTest extends AbstractUnitTestCase
 {
     use VersionTrait;
 

@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\ConnectionLocator;
 
 use Phalcon\DataMapper\Pdo\ConnectionLocator;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function spl_object_hash;
 
-final class GetSetMasterTest extends DatabaseTestCase
+final class GetSetMasterTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator ::
@@ -24,19 +24,26 @@ final class GetSetMasterTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorGetSetMaster(): void
     {
-        $connection1 = self::getDataMapperConnection();
-        $connection2 = self::getDataMapperConnection();
+        $connection1 = function () {
+            return self::getDataMapperConnection();
+        };
+        $connection2 = function () {
+            return self::getDataMapperConnection();
+        };
         $locator     = new ConnectionLocator($connection1);
 
-        $actual = $locator->getMaster();
-        $this->assertEquals(spl_object_hash($connection1), spl_object_hash($actual));
+        $expected = spl_object_hash($connection1());
+        $actual   = spl_object_hash($locator->getMaster());
+        $this->assertSame($expected, $actual);
 
         $locator->setMaster($connection2);
-        $actual = $locator->getMaster();
-        $this->assertEquals(spl_object_hash($connection2), spl_object_hash($actual));
+
+        $expected = spl_object_hash($connection2());
+        $actual   = spl_object_hash($locator->getMaster());
+        $this->assertSame($expected, $actual);
     }
 }

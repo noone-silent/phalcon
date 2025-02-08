@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetColumnsTest extends DatabaseTestCase
+final class GetColumnsTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: getColumns()
@@ -24,7 +24,7 @@ final class GetColumnsTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaGetColumns(): void
     {
@@ -44,7 +44,7 @@ final class GetColumnsTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaGetColumnsArray(): void
     {

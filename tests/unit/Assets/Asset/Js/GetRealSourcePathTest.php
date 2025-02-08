@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class GetRealSourcePathTest extends UnitTestCase
+final class GetRealSourcePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Asset\Js :: getRealSourcePath() - js local

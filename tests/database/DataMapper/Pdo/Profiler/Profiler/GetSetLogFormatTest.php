@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetSetLogFormatTest extends DatabaseTestCase
+final class GetSetLogFormatTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler ::
@@ -22,22 +22,27 @@ final class GetSetLogFormatTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoProfilerProfilerGetSetLogFormat(): void
     {
         $profiler = new Profiler();
 
-        $this->assertEquals(
-            "{method} ({duration}s): {statement} {backtrace}",
-            $profiler->getLogFormat()
-        );
+        $expected = "M: {method} ({duration}s)"
+            . PHP_EOL
+            . "S: {statement}"
+            . PHP_EOL
+            . "V: {values}"
+            . PHP_EOL
+            . "B: {backtrace}";
+        $actual   = $profiler->getLogFormat();
+        $this->assertSame($expected, $actual);
 
         $format = "{method} ({duration}s): {statement}";
         $profiler->setLogFormat($format);
-        $this->assertEquals(
-            $format,
-            $profiler->getLogFormat()
-        );
+
+        $expected = $format;
+        $actual   = $profiler->getLogFormat();
+        $this->assertSame($expected, $actual);
     }
 }

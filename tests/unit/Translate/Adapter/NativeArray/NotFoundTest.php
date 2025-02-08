@@ -15,12 +15,13 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 use Phalcon\Tests\Fixtures\Translate\Adapter\NativeAdapterFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
-final class NotFoundTest extends UnitTestCase
+final class NotFoundTest extends AbstractUnitTestCase
 {
     use TranslateNativeArrayTrait;
 

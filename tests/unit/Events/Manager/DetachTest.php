@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Exception;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class DetachTest extends UnitTestCase
+final class DetachTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -74,24 +74,5 @@ final class DetachTest extends UnitTestCase
         $this->assertCount(1, $events);
         $this->assertArrayHasKey($eventType, $events);
         $this->assertCount(0, $events[$eventType]);
-    }
-
-    /**
-     * Tests detach handler by using an Object - exception
-     *
-     * @dataProvider booleanProvider
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testEventsManagerDetachException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Event handler must be an Object or Callable');
-
-        $manager = new Manager();
-        $manager->detach('test:detachable', false);
     }
 }

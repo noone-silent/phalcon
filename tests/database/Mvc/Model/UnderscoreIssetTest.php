@@ -12,12 +12,12 @@
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models;
 
-final class UnderscoreIssetTest extends DatabaseTestCase
+final class UnderscoreIssetTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -38,7 +38,7 @@ final class UnderscoreIssetTest extends DatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-05-22
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreIsset(): void
     {

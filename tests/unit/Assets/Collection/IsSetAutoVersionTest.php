@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class IsSetAutoVersionTest extends UnitTestCase
+final class IsSetAutoVersionTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Assets\Collection :: isAutoVersion() /

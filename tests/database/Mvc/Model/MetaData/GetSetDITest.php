@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\Exception as ExpectedException;
 use Phalcon\Mvc\Model\MetaData\Adapter\Memory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class GetSetDITest extends DatabaseTestCase
+final class GetSetDITest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -49,7 +49,7 @@ final class GetSetDITest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-05
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelMetadataGetDIThrowsException(): void
     {
@@ -69,7 +69,7 @@ final class GetSetDITest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-02-01
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelMetadataGetSetDI(
         string $service

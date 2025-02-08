@@ -15,14 +15,15 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 use function date;
 use function intval;
 use function uniqid;
 
-final class GetSetLabelTest extends UnitTestCase
+final class GetSetLabelTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: getLabel()/setLabels()
@@ -44,16 +45,26 @@ final class GetSetLabelTest extends UnitTestCase
             ]
         );
 
-        $label = uniqid('lbl-');
+        $label1 = uniqid('lbl-');
+        $label2 = uniqid('lbl-');
         $validation->setLabels(
             [
-                'foo' => $label,
+                'name' => $label1,
+                'city' => $label2,
             ]
         );
-        $validator->validate($validation, 'foo');
+        $validator->validate($validation, 'name');
 
-        $expected = $label;
-        $actual   = $validation->getLabel('foo');
+        $expected = $label1;
+        $actual   = $validation->getLabel('name');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'unknown';
+        $actual   = $validation->getLabel('unknown');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'name, email';
+        $actual   = $validation->getLabel(['name', 'email']);
         $this->assertSame($expected, $actual);
     }
 }

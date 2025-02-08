@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
-final class InterpolatorTest extends UnitTestCase
+final class InterpolatorTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Translate\Interpolator\IndexedArray :: objects

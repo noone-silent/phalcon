@@ -15,20 +15,11 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
 use Phalcon\Support\Version;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetVersionTest extends UnitTestCase
+final class GetVersionTest extends AbstractUnitTestCase
 {
-//    use DiTrait;
-
-    /**
-     * @return void
-     */
-    public function setUp(): void
-    {
-//        $this->setNewFactoryDefault();
-    }
-
     /**
      * Tests Phalcon\Debug :: getVersion()
      *
@@ -42,15 +33,17 @@ final class GetVersionTest extends UnitTestCase
         $debug   = new Debug();
         $version = new Version();
 
-        $target  = '"_new"';
-        $uri     = '"https://docs.phalcon.io/'
+        $target  = "'_new'";
+        $uri     = "'https://docs.phalcon.io/"
             . $version->getPart(Version::VERSION_MAJOR) . '.'
-            . $version->getPart(Version::VERSION_MEDIUM) . '/en/"';
+            . $version->getPart(Version::VERSION_MEDIUM) . "/'";
         $version = $version->get();
 
-        $this->assertSame(
-            "<div class=\"version\">Phalcon Framework <a href={$uri} target={$target}>{$version}</a></div>",
-            $debug->getVersion()
-        );
+        $expected = "<div class='version'>
+    Phalcon Framework <a href={$uri} target={$target}>{$version}</a>
+</div>";
+
+        $actual = $debug->getVersion();
+        $this->assertSame($expected, $actual);
     }
 }

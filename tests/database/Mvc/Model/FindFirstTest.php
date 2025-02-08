@@ -17,7 +17,7 @@ use PDO;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Row;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Migrations\StringPrimaryMigration;
@@ -30,7 +30,7 @@ use Phalcon\Tests\Models\ModelWithStringPrimary;
 
 use function uniqid;
 
-final class FindFirstTest extends DatabaseTestCase
+final class FindFirstTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -88,7 +88,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirst(): void
     {
@@ -125,7 +125,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstByNotFound(): void
     {
@@ -139,7 +139,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @since  2020-11-22
      * @issue  https://github.com/phalcon/cphalcon/issues/15356
      *
-     * @group  common
+     * @group mysql
      *
      * @author Phalcon Team <team@phalcon.io>
      */
@@ -175,7 +175,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstColumnMap(): void
     {
@@ -220,7 +220,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstException(): void
     {
@@ -239,7 +239,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstExtended(): void
     {
@@ -269,7 +269,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-05
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstExtendedColumn(): void
     {
@@ -300,7 +300,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-06-14
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstFoundNotFoundGetRelated(): void
     {
@@ -391,7 +391,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindFirstNotFound(): void
     {
@@ -412,7 +412,7 @@ final class FindFirstTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-27
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelFindFirstStringPrimaryKey(
         array | string $params,

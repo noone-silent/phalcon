@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Camelize;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class CamelizeTest extends UnitTestCase
+final class CamelizeTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -56,13 +58,11 @@ final class CamelizeTest extends UnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: camelize()
      *
-     * @dataProvider getSources
-     *
-     *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getSources')]
     public function testSupportHelperStrCamelize(
         string $value,
         string $expected,

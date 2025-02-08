@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
 use Phalcon\Assets\Asset\Css;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetRealSourcePathTest extends UnitTestCase
+final class GetRealSourcePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Asset\Css :: getRealSourcePath() - css local

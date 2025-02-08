@@ -41,13 +41,29 @@ RUN apt update -y && \
         zip && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
+# Remove this RUN when imagick will be available via pecl
+RUN cd /opt && \
+    git clone https://github.com/Imagick/imagick.git && \
+    cd imagick && \
+    phpize && ./configure && \
+    make && make install
+
 # PECL Packages
+#RUN pecl install -o -f redis && \
+#    pecl install igbinary \
+#      msgpack \
+#      apcu \
+#      yaml \
+#      imagick \
+#      memcached \
+#      xdebug
+
 RUN pecl install -o -f redis && \
     pecl install igbinary \
       msgpack \
       apcu \
       yaml \
-      imagick \
+#      imagick \
       memcached \
       xdebug
 
@@ -82,13 +98,21 @@ RUN docker-php-ext-install \
         zip
 
 # Install PHP extensions
+#RUN docker-php-ext-enable \
+#        gettext \
+#        redis \
+#        igbinary \
+#        msgpack \
+#        apcu \
+#        imagick \
+#        yaml \
+#        memcached \
+#        xdebug
 RUN docker-php-ext-enable \
         gettext \
         redis \
-        igbinary \
         msgpack \
         apcu \
-        imagick \
         yaml \
         memcached \
         xdebug

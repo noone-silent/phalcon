@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Last;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function strlen;
 
-final class LastTest extends UnitTestCase
+final class LastTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Helper\Arr :: last()

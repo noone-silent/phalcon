@@ -21,8 +21,6 @@ use Phalcon\Mvc\ModelInterface;
 use function method_exists;
 
 /**
- * Phalcon\Mvc\Model\MetaData\Strategy\Introspection
- *
  * Queries the table meta-data in order to introspect the model's metadata
  */
 class Introspection implements StrategyInterface
@@ -39,9 +37,9 @@ class Introspection implements StrategyInterface
          * Check for a columnMap() method on the model
          */
         if (true === method_exists($model, "columnMap")) {
-            $userColumnMap = call_user_func([$model, "columnMap"]);
+            $userColumnMap = $model->columnMap();
 
-            if (false === is_array($userColumnMap)) {
+            if (!is_array($userColumnMap)) {
                 throw new Exception("columnMap() not returned an array");
             }
 
@@ -73,18 +71,18 @@ class Introspection implements StrategyInterface
         $readConnection = $model->getReadConnection();
 
         if (!$readConnection->tableExists($table, $schema)) {
+            $completeTable = $table;
             if (null !== $schema) {
                 $completeTable = $schema . "'.'" . $table;
-            } else {
-                $completeTable = $table;
             }
 
             /**
              * The table not exists
              */
             throw new Exception(
-                "Table '" . $completeTable . "' doesn't exist in database when dumping meta-data for " .
-                get_class($model)
+                "Table '" . $completeTable
+                . "' doesn't exist in database when dumping meta-data for "
+                . get_class($model)
             );
         }
 
@@ -94,18 +92,19 @@ class Introspection implements StrategyInterface
         $columns = $readConnection->describeColumns($table, $schema);
 
         if (0 === count($columns)) {
+            $completeTable = $table;
             if (null !== $schema) {
                 $completeTable = $schema . "'.'" . $table;
-            } else {
-                $completeTable = $table;
             }
 
             /**
              * The table not exists
              */
             throw new Exception(
-                "Cannot obtain table columns for the mapped source '" . $completeTable .
-                "' used in model " . get_class($model)
+                "Cannot obtain table columns for the mapped source '"
+                . $completeTable
+                . "' used in model "
+                . get_class($model)
             );
         }
 
@@ -173,10 +172,11 @@ class Introspection implements StrategyInterface
              */
             $defaultValue = $column->getDefault();
 
-            if ($defaultValue !== null || !$column->isNotNull()) {
-                if (!$column->isAutoIncrement()) {
-                    $defaultValues[$fieldName] = $defaultValue;
-                }
+            if (
+                ($defaultValue !== null || !$column->isNotNull()) &&
+                !$column->isAutoIncrement()
+            ) {
+                $defaultValues[$fieldName] = $defaultValue;
             }
         }
 

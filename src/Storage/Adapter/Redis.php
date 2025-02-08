@@ -17,7 +17,6 @@ use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 use Redis as RedisService;
 use RedisException;
 
@@ -204,7 +203,7 @@ class Redis extends AbstractAdapter
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
-        if (true === is_int($ttl) && $ttl < 1) {
+        if (is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
         }
 
@@ -250,7 +249,7 @@ class Redis extends AbstractAdapter
         $auth = $this->options['auth'];
 
         try {
-            $error = (true !== empty($auth) && true !== $connection->auth($auth));
+            $error = (!empty($auth) && true !== $connection->auth($auth));
         } catch (BaseException) {
             $error = true;
         }
@@ -360,7 +359,7 @@ class Redis extends AbstractAdapter
 
         $serializer = mb_strtolower($this->defaultSerializer);
 
-        if (true === isset($map[$serializer])) {
+        if (isset($map[$serializer])) {
             $this->defaultSerializer = '';
             $connection->setOption(RedisService::OPT_SERIALIZER, $map[$serializer]);
         }

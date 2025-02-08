@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Column;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\FractalDatesMigration;
 use Phalcon\Tests\Fixtures\Traits\DbTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\FractalDates;
 
-final class GetScaleTest extends DatabaseTestCase
+final class GetScaleTest extends AbstractDatabaseTestCase
 {
     use DbTrait;
     use DiTrait;
@@ -37,7 +37,7 @@ final class GetScaleTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbColumnGetScale(): void
     {
@@ -57,6 +57,8 @@ final class GetScaleTest extends DatabaseTestCase
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-23
+     *
+     * @group mysql
      */
     public function testDbColumnGetScaleDateTimeTimeTimeStamp(): void
     {

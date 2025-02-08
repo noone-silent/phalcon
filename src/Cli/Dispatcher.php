@@ -126,22 +126,20 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         array | string $filters = [],
         mixed $defaultValue = null
     ): mixed {
-        if (true !== isset($this->options[$option])) {
+        if (!isset($this->options[$option])) {
             return $defaultValue;
         }
 
         $optionValue = $this->options[$option];
-        if (true === empty($filters)) {
+        if (empty($filters)) {
             return $optionValue;
         }
 
-        if (null === $this->container) {
-            $this->throwDispatchException(
-                "A dependency injection container is required to access "
-                . "the 'filter' service",
-                DispatcherException::EXCEPTION_NO_DI
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            "the 'filter' service",
+            DispatcherException::EXCEPTION_NO_DI
+        );
 
         /** @var Filter $filter */
         $filter = $this->container->getShared("filter");

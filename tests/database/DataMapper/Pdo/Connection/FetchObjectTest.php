@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Resultset;
 use stdClass;
 
-final class FetchObjectTest extends DatabaseTestCase
+final class FetchObjectTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject() - ctor
@@ -32,7 +32,7 @@ final class FetchObjectTest extends DatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchObject(
             'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
@@ -46,9 +46,9 @@ final class FetchObjectTest extends DatabaseTestCase
         );
 
         $this->assertInstanceOf(Resultset::class, $all);
-        $this->assertEquals('vader', $all->calculated);
-        $this->assertEquals(1, $all->inv_id);
-        $this->assertEquals(101, $all->inv_total);
+        $this->assertSame('vader', $all->calculated);
+        $this->assertSame(1, $all->inv_id);
+        $this->assertSame(101.0, $all->inv_total);
     }
 
     /**
@@ -56,7 +56,7 @@ final class FetchObjectTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionFetchObject(): void
     {
@@ -66,7 +66,7 @@ final class FetchObjectTest extends DatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchObject(
             'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
@@ -76,7 +76,7 @@ final class FetchObjectTest extends DatabaseTestCase
         );
 
         $this->assertInstanceOf(stdClass::class, $all);
-        $this->assertEquals(1, $all->inv_id);
-        $this->assertEquals(101, $all->inv_total);
+        $this->assertSame(1, $all->inv_id);
+        $this->assertSame(101.0, $all->inv_total);
     }
 }

@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class GetReadConnectionTest extends DatabaseTestCase
+final class GetReadConnectionTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -33,7 +33,7 @@ final class GetReadConnectionTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-31
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetReadConnection(): void
     {

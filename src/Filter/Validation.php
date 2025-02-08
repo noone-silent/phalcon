@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
-use Phalcon\Di\Di;
+use Phalcon\Di\Exception as DiException;
 use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
 use Phalcon\Filter\Validation\Exception as ValidationException;
@@ -27,8 +27,6 @@ use function array_filter;
 use function in_array;
 use function is_array;
 use function is_object;
-use function is_string;
-use function join;
 use function method_exists;
 use function property_exists;
 
@@ -47,7 +45,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @var array|object
      */
-    protected array | object $data;
+    protected array | object | null $data = null;
 
     /**
      * @var object|null
@@ -94,7 +92,7 @@ class Validation extends Injectable implements ValidationInterface
         $this->validators = array_filter(
             $validators,
             function (array $element) {
-                return true !== is_array($element[0]) ||
+                return !is_array($element[0]) ||
                     !($element[1] instanceof AbstractCombinedFieldsValidator);
             }
         );
@@ -138,12 +136,8 @@ class Validation extends Injectable implements ValidationInterface
                     $this->validators[$singleField][] = $validator;
                 }
             }
-        } elseif (true === is_string($field)) {
-            $this->validators[$field][] = $validator;
         } else {
-            throw new ValidationException(
-                "Field must be passed as array of fields or string"
-            );
+            $this->validators[$field][] = $validator;
         }
 
         return $this;
@@ -168,13 +162,13 @@ class Validation extends Injectable implements ValidationInterface
      * Assigns the data to an entity
      * The entity is used to obtain the validation values
      *
-     * @param object       $entity
+     * @param object|null  $entity
      * @param array|object $data
      *
      * @return ValidationInterface
      */
     public function bind(
-        object $entity,
+        ?object $entity,
         array | object $data
     ): ValidationInterface {
         $this->setEntity($entity);
@@ -211,7 +205,7 @@ class Validation extends Injectable implements ValidationInterface
      */
     public function getFilters(string $field = null): mixed
     {
-        if (true === empty($field)) {
+        if (empty($field)) {
             return $this->filters;
         }
 
@@ -228,7 +222,7 @@ class Validation extends Injectable implements ValidationInterface
     public function getLabel(array | string $field): string
     {
         if (is_array($field)) {
-            return join(", ", $field);
+            return implode(", ", $field);
         }
 
         return $this->labels[$field] ?? $field;
@@ -260,7 +254,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param string $field
      *
      * @return mixed
-     * @throws ValidationException
+     * @throws DiException
      */
     public function getValue(string $field): mixed
     {
@@ -285,44 +279,34 @@ class Validation extends Injectable implements ValidationInterface
             return null;
         }
 
-        if (true === isset($this->filters[$field])) {
+        if (
+            isset($this->filters[$field]) &&
+            !empty($this->filters[$field])
+        ) {
             $fieldFilters = $this->filters[$field];
-            if (true !== empty($fieldFilters)) {
-                $container = $this->getDI();
-                if (null === $this->container) {
-                    $container = Di::getDefault();
+            /**
+             * This will throw an exception if the service is not there
+             */
+            $filterService = $this->getDI()->getShared('filter');
+
+            $value = $filterService->sanitize($value, $fieldFilters);
+
+            /**
+             * Set filtered value in entity
+             */
+            if (null !== $this->entity && false === $isRawFetched) {
+                $method = "set" . $this->toCamelize($field);
+
+                if (true === method_exists($this->entity, $method)) {
+                    $this->entity->{$method}($value);
+                } elseif (true === method_exists($this->entity, "writeAttribute")) {
+                    $this->entity->writeAttribute($field, $value);
+                } elseif (true === property_exists($this->entity, $field)) {
+                    $this->entity->{$field} = $value;
                 }
-
-                $filterService = null;
-                if (true === $container->has('filter')) {
-                    $filterService = $container->getShared('filter');
-                }
-
-                if (!($filterService instanceof FilterInterface)) {
-                    throw new ValidationException(
-                        "Returned 'filter' service is invalid"
-                    );
-                }
-
-                $filterService->sanitize($value, $fieldFilters);
-
-                /**
-                 * Set filtered value in entity
-                 */
-                if (null !== $this->entity && false === $isRawFetched) {
-                    $method = "set" . $this->toCamelize($field);
-
-                    if (true === method_exists($this->entity, $method)) {
-                        $this->entity->{$method}($value);
-                    } elseif (true === method_exists($this->entity, "writeAttribute")) {
-                        $this->entity->writeAttribute($field, $value);
-                    } elseif (true === property_exists($this->entity, $field)) {
-                        $this->entity->{$field} = $value;
-                    }
-                }
-
-                return $value;
             }
+
+            return $value;
         }
 
         // Cache the calculated value only if it's not entity
@@ -345,11 +329,11 @@ class Validation extends Injectable implements ValidationInterface
         array | object $data,
         string $field
     ): mixed {
-        if (true === isset($this->values[$field])) {
+        if (isset($this->values[$field])) {
             return $this->values[$field];
         }
 
-        if (is_array($data) && true === isset($data[$field])) {
+        if (is_array($data) && isset($data[$field])) {
             return $data[$field];
         }
 
@@ -423,11 +407,11 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Sets the bound entity
      *
-     * @param object $entity
+     * @param object|null $entity
      *
      * @return void
      */
-    public function setEntity(object $entity): void
+    public function setEntity(?object $entity): void
     {
         $this->entity = $entity;
     }
@@ -445,7 +429,7 @@ class Validation extends Injectable implements ValidationInterface
         array | string $filters
     ): ValidationInterface {
         $fields = $field;
-        if (true !== is_array($field)) {
+        if (!is_array($field)) {
             $fields = [$field];
         }
 
@@ -530,7 +514,7 @@ class Validation extends Injectable implements ValidationInterface
 
         foreach ($this->validators as $field => $validators) {
             foreach ($validators as $validator) {
-                if (true !== is_object($validator)) {
+                if (!is_object($validator)) {
                     throw new ValidationException(
                         "One of the validators is not valid"
                     );
@@ -557,14 +541,14 @@ class Validation extends Injectable implements ValidationInterface
         }
 
         foreach ($this->combinedFieldsValidators as $scope) {
-            if (true !== is_array($scope)) {
+            if (!is_array($scope)) {
                 throw new ValidationException("The validator scope is not valid");
             }
 
             $field     = $scope[0];
             $validator = $scope[1];
 
-            if (true !== is_object($validator)) {
+            if (!is_object($validator)) {
                 throw new ValidationException("One of the validators is not valid");
             }
 

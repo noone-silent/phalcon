@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
+final class ConnectDisconnectIsConnectedTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection ::
@@ -22,7 +22,7 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionConnectDisconnectIsConnected(): void
     {
@@ -34,6 +34,8 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
         $this->assertTrue($connection->isConnected());
         $connection->disconnect();
         $this->assertFalse($connection->isConnected());
+        $connection->connect();
+        $this->assertTrue($connection->isConnected());
     }
 
     /**
@@ -41,7 +43,7 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionConnectQueries(): void
     {
@@ -58,17 +60,15 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
             );
 
             $this->assertFalse($connection->isConnected());
-            $result = $connection->fetchOne(
-                'show variables like "character_set_client"'
-            );
 
-            $this->assertTrue($connection->isConnected());
             $expected = [
                 'Variable_name' => 'character_set_client',
                 'Value'         => 'big5',
             ];
-
-            $this->assertEquals($expected, $result);
+            $actual   = $connection->fetchOne(
+                'show variables like "character_set_client"'
+            );
+            $this->assertSame($expected, $actual);
         }
     }
 }

@@ -6,3 +6,4 @@ parameters:
         -
             message: '#Static access to instance property Phalcon\\Support\\Debug::\$isActive.#'
             path: src/Support/Debug.php
+        - "#Unsafe usage of new static#"

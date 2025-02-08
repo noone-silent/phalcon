@@ -17,13 +17,13 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Settings;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;
 use Phalcon\Tests\Models\CustomersDymanicUpdate;
 
-final class DynamicUpdateTest extends DatabaseTestCase
+final class DynamicUpdateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -44,7 +44,7 @@ final class DynamicUpdateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDisableDynamicUpdate(): void
     {
@@ -103,7 +103,7 @@ final class DynamicUpdateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDisabledCherryPickDynamicUpdate(): void
     {
@@ -161,7 +161,7 @@ final class DynamicUpdateTest extends DatabaseTestCase
      *
      * @issue https://github.com/phalcon/cphalcon/issues/16343
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelEnableDynamicUpdate(): void
     {

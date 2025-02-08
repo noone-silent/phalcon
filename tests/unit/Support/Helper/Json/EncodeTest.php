@@ -15,11 +15,12 @@ namespace Phalcon\Tests\Unit\Support\Helper\Json;
 
 use InvalidArgumentException;
 use Phalcon\Support\Helper\Json\Encode;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use const JSON_HEX_TAG;
 
-final class EncodeTest extends UnitTestCase
+final class EncodeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Helper\Json :: encode()

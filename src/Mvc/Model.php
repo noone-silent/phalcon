@@ -545,7 +545,7 @@ abstract class Model extends AbstractInjectionAware implements
 
                         unset($this->related[$lowerProperty]);
 
-                        if (count($related) > 0) {
+                        if (!empty($related)) {
                             $this->dirtyRelated[$lowerProperty] = $related;
                             $this->dirtyState                   = self::DIRTY_STATE_TRANSIENT;
                         } else {
@@ -753,7 +753,7 @@ abstract class Model extends AbstractInjectionAware implements
     public function appendMessagesFrom(ModelInterface $model): void
     {
         $messages = $model->getMessages();
-        if (true !== empty($messages)) {
+        if (!empty($messages)) {
             foreach ($messages as $message) {
                 if (is_object($message)) {
                     $message->setMetaData(
@@ -842,7 +842,7 @@ abstract class Model extends AbstractInjectionAware implements
             $dataMapped = $data;
         }
 
-        if (count($dataMapped) === 0) {
+        if (empty($dataMapped)) {
             return $this;
         }
 
@@ -1912,7 +1912,7 @@ abstract class Model extends AbstractInjectionAware implements
             $params = $parameters;
         }
 
-        $query = static::getPreparedQuery($params);
+        $query = self::getPreparedQuery($params);
 
         /**
          * Execute the query passing the bind-params and casting-types
@@ -2032,7 +2032,7 @@ abstract class Model extends AbstractInjectionAware implements
             );
         }
 
-        $query = static::getPreparedQuery($params, 1);
+        $query = self::getPreparedQuery($params, 1);
 
         /**
          * Return only the first row

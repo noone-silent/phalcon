@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Row;
 
 use Phalcon\Mvc\Model\Row;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class SetDirtyStateTest extends DatabaseTestCase
+final class SetDirtyStateTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Mvc\Model\Row :: setDirtyState()
@@ -24,7 +24,7 @@ final class SetDirtyStateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelRowSetDirtyState(): void
     {

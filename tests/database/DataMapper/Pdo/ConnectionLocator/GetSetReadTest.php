@@ -13,12 +13,12 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\ConnectionLocator;
 
 use Phalcon\DataMapper\Pdo\ConnectionLocator;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function in_array;
 use function spl_object_hash;
 
-final class GetSetReadTest extends DatabaseTestCase
+final class GetSetReadTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getRead() -
@@ -26,15 +26,20 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorGetReadEmpty(): void
     {
         $master  = self::getDataMapperConnection();
-        $locator = new ConnectionLocator($master);
+        $locator = new ConnectionLocator(
+            function () use ($master) {
+                return $master;
+            }
+        );
 
-        $actual = $locator->getRead();
-        $this->assertEquals(spl_object_hash($master), spl_object_hash($actual));
+        $expected = spl_object_hash($master);
+        $actual   = spl_object_hash($locator->getRead());
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -43,7 +48,7 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorGetReadException(): void
     {
@@ -52,10 +57,11 @@ final class GetSetReadTest extends DatabaseTestCase
             "Connection not found: read:unknown"
         );
 
-        $master  = self::getDataMapperConnection();
         $read1   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () {
+                return self::getDataMapperConnection();
+            },
             [
                 "read1" => function () use ($read1) {
                     return $read1;
@@ -72,15 +78,16 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorGetReadRandom(): void
     {
-        $master  = self::getDataMapperConnection();
         $read1   = self::getDataMapperConnection();
         $read2   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () {
+                return self::getDataMapperConnection();
+            },
             [
                 "read1" => function () use ($read1) {
                     return $read1;
@@ -106,7 +113,7 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorGetSetRead(): void
     {
@@ -114,7 +121,9 @@ final class GetSetReadTest extends DatabaseTestCase
         $read1   = self::getDataMapperConnection();
         $read2   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () use ($master) {
+                return $master;
+            },
             [
                 "read1" => function () use ($read1) {
                     return $read1;
@@ -125,10 +134,12 @@ final class GetSetReadTest extends DatabaseTestCase
             ]
         );
 
-        $actual = $locator->getRead("read1");
-        $this->assertEquals(spl_object_hash($read1), spl_object_hash($actual));
+        $expected = spl_object_hash($read1);
+        $actual   = spl_object_hash($locator->getRead("read1"));
+        $this->assertSame($expected, $actual);
 
-        $actual = $locator->getRead("read2");
-        $this->assertEquals(spl_object_hash($read2), spl_object_hash($actual));
+        $expected = spl_object_hash($read1);
+        $actual   = spl_object_hash($locator->getRead("read1"));
+        $this->assertSame($expected, $actual);
     }
 }

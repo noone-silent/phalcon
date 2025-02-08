@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Js;
 
 use Phalcon\Assets\Inline\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetFilterTest extends UnitTestCase
+final class GetSetFilterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Js :: getFilter()/setFilter()

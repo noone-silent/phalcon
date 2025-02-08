@@ -15,11 +15,11 @@ namespace Phalcon\Cache;
 
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Cache\Exception\InvalidArgumentException;
+use Phalcon\Cache\Exception\Exception;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Traversable;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * This component offers caching capabilities for your application.
@@ -61,31 +61,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @param string $key
      *
-     * @throws InvalidArgumentException
+     * @throws Exception
      */
     protected function checkKey(string $key): void
     {
         if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
-            $exception = $this->getExceptionClass();
-            throw new $exception(
+            throw new Exception(
                 "The key contains invalid characters"
-            );
-        }
-    }
-
-    /**
-     * Checks the key. If it contains invalid characters an exception is thrown
-     *
-     * @param mixed $keys
-     *
-     * @throws InvalidArgumentException
-     */
-    protected function checkKeys(mixed $keys): void
-    {
-        if (!(is_array($keys) || $keys instanceof Traversable)) {
-            $exception = $this->getExceptionClass();
-            throw new $exception(
-                "The keys need to be an array or instance of Traversable"
             );
         }
     }
@@ -108,7 +90,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return bool True if the item was successfully removed. False if there
      *              was an error.
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is
+     * @throws Exception MUST be thrown if the $key string is
      *                                  not a legal value.
      * @throws EventsException
      */
@@ -133,18 +115,17 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return bool True if the items were successfully removed. False if there
      *              was an error.
      *
-     * @throws InvalidArgumentException MUST be thrown if $keys is neither an
+     * @throws Exception MUST be thrown if $keys is neither an
      *                                  array nor a Traversable, or if any of
      *                                  the $keys are not a legal value.
      * @throws EventsException
      */
-    protected function doDeleteMultiple($keys): bool
+    protected function doDeleteMultiple(iterable $keys): bool
     {
         $this->fireManagerEvent("cache:beforeDeleteMultiple", $keys);
 
-        $this->checkKeys($keys);
-
         $result = true;
+        /** @var string $key */
         foreach ($keys as $key) {
             if (true !== $this->adapter->delete($key)) {
                 $result = false;
@@ -165,7 +146,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return mixed The value of the item from the cache, or $default in case
      * of cache miss.
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is
+     * @throws Exception MUST be thrown if the $key string is
      * not a legal value.
      * @throws EventsException
      */
@@ -193,17 +174,18 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return iterable<array-key, mixed> A list of key => value pairs. Cache
      * keys that do not exist or are stale will have $default as value.
      *
-     * @throws InvalidArgumentException MUST be thrown if $keys is neither an
+     * @throws Exception MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
      * @throws EventsException
      */
-    protected function doGetMultiple(mixed $keys, mixed $default = null)
-    {
+    protected function doGetMultiple(
+        iterable $keys,
+        mixed $default = null
+    ): iterable {
         $this->fireManagerEvent('cache:beforeGetMultiple', $keys);
 
-        $this->checkKeys($keys);
-
         $results = [];
+        /** @var string $element */
         foreach ($keys as $element) {
             $results[$element] = $this->get($element, $default);
         }
@@ -220,7 +202,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @return bool
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is
+     * @throws Exception MUST be thrown if the $key string is
      * not a legal value.
      * @throws EventsException
      */
@@ -252,12 +234,15 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @return bool True on success and false on failure.
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is not
+     * @throws Exception MUST be thrown if the $key string is not
      * a legal value.
      * @throws EventsException
      */
-    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
-    {
+    protected function doSet(
+        string $key,
+        mixed $value,
+        null | int | DateInterval $ttl = null
+    ): bool {
         $this->fireManagerEvent('cache:beforeSet', $key);
 
         $this->checkKey($key);
@@ -283,17 +268,21 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @return bool True on success and false on failure.
      *
-     * @throws InvalidArgumentException MUST be thrown if $values is neither an
+     * @throws Exception MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
      * @throws EventsException
      */
-    protected function doSetMultiple(mixed $values, mixed $ttl = null): bool
-    {
+    protected function doSetMultiple(
+        iterable $values,
+        null | int | DateInterval $ttl = null
+    ): bool {
         $this->fireManagerEvent('cache:beforeSetMultiple', $values);
 
-        $this->checkKeys($values);
-
         $result = true;
+        /**
+         * @var string $key
+         * @var mixed $value
+         */
         foreach ($values as $key => $value) {
             if (true !== $this->set($key, $value, $ttl)) {
                 $result = false;
@@ -304,12 +293,4 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
         return $result;
     }
-
-
-    /**
-     * Returns the exception class that will be used for exceptions thrown
-     *
-     * @return string
-     */
-    abstract protected function getExceptionClass(): string;
 }

@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Get;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class GetTest extends UnitTestCase
+final class GetTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]
@@ -84,13 +86,12 @@ final class GetTest extends UnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Arr :: get() - cast
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getExamples')]
     public function testSupportHelperArrGetCast(
         string $cast,
         mixed $value,

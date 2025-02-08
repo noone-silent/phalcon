@@ -15,11 +15,12 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\Fixtures\Support\Dump\ClassProperties;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use const PHP_OS_FAMILY;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Debug\Dump :: __construct() - dump properties

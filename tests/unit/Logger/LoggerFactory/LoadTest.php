@@ -19,10 +19,10 @@ use Phalcon\Logger\Exception as LoggerException;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Psr\Log\LoggerInterface;
 
-final class LoadTest extends UnitTestCase
+final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 
@@ -48,7 +48,7 @@ final class LoadTest extends UnitTestCase
 
         $this->expectException(LoggerException::class);
         $this->expectExceptionMessage(
-            "You must provide 'name' option in factory config parameter."
+            "You must provide the 'name' option in the factory config parameter."
         );
 
         $newOptions = $options;

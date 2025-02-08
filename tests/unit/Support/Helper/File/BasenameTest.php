@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\File;
 
 use Phalcon\Support\Helper\File\Basename;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function basename;
 
-final class BasenameTest extends UnitTestCase
+final class BasenameTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]
@@ -90,13 +92,11 @@ final class BasenameTest extends UnitTestCase
      * Tests Phalcon\Support\Helper\File :: basename() with non-ASCII $uri
      * support
      *
-     * @dataProvider getNonAsciiExamples
-     *
-     *
      * @return void
      * @author       Ian Hu <hu2008yinxiang@163.com>
      * @since        2020-09-09
      */
+    #[DataProvider('getNonAsciiExamples')]
     public function testSupportHelperFileBasenameNonASCII(
         string $path,
         string $expected
@@ -114,13 +114,11 @@ final class BasenameTest extends UnitTestCase
      * Tests Phalcon\Support\Helper\File :: basename() with ASCII $uri
      * it should be same as PHP's basename
      *
-     * @dataProvider getAsciiExamples
-     *
-     *
      * @return void
      * @author       Ian Hu <hu2008yinxiang@163.com>
      * @since        2020-09-09
      */
+    #[DataProvider('getAsciiExamples')]
     public function testSupportHelperFileBasenamePureASCII(
         string $path,
         string $suffix

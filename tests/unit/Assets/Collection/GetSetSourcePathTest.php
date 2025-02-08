@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class GetSetSourcePathTest extends UnitTestCase
+final class GetSetSourcePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: getSourcePath() / setSourcePath()

@@ -17,7 +17,7 @@ use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -28,7 +28,7 @@ use Phalcon\Tests\Models\InvoicesKeepSnapshots;
 
 use function uniqid;
 
-final class QueryTest extends DatabaseTestCase
+final class QueryTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -73,7 +73,7 @@ final class QueryTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQuery(): void
     {
@@ -96,7 +96,7 @@ final class QueryTest extends DatabaseTestCase
      * @since  2020-05-01
      * @issue  14535
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryIssue14535(): void
     {
@@ -123,7 +123,7 @@ final class QueryTest extends DatabaseTestCase
      * @since  2018-11-13
      * @issue  14783
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryIssue14783(): void
     {

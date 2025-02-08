@@ -15,11 +15,13 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function hash;
 
-final class GetAssetKeyTest extends UnitTestCase
+final class GetAssetKeyTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -33,6 +35,8 @@ final class GetAssetKeyTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('providerAssets')]
+
     public function testAssetsAssetGetAssetKey(
         string $type,
         string $path

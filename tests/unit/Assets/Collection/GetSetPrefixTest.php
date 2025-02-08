@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetPrefixTest extends UnitTestCase
+final class GetSetPrefixTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: getPrefix() / setPrefix()

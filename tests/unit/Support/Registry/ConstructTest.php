@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: __construct()
@@ -28,9 +28,6 @@ final class ConstructTest extends UnitTestCase
     {
         $registry = new Registry();
 
-        $this->assertInstanceOf(
-            Registry::class,
-            $registry
-        );
+        $this->assertInstanceOf(Registry::class, $registry);
     }
 }

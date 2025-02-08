@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
 use function uniqid;
 
-final class ReadWriteAttributeTest extends DatabaseTestCase
+final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -41,7 +41,7 @@ final class ReadWriteAttributeTest extends DatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelWriteAttribute(): void
     {
@@ -74,7 +74,7 @@ final class ReadWriteAttributeTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelWriteAttributeUndefinedPropertyWithAssociativeArray(): void
     {
@@ -105,7 +105,7 @@ final class ReadWriteAttributeTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelWriteAttributeWithAssociativeArray(): void
     {

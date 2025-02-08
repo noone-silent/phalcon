@@ -17,9 +17,10 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Email;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class AddTest extends UnitTestCase
+final class AddTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: add()
@@ -35,32 +36,21 @@ final class AddTest extends UnitTestCase
 
         $validation = new Validation();
 
-        $validation->add(
-            'name',
-            $alpha
-        );
+        $validation
+            ->add('name', $alpha)
+            ->add('name', $presenceOf)
+            ->add('email', $email);
 
-        $validation->add(
-            'name',
-            $presenceOf
-        );
-
-        $validation->add(
-            'email',
-            $email
-        );
-
-        $this->assertEquals(
-            [
-                'name'  => [
-                    $alpha,
-                    $presenceOf,
-                ],
-                'email' => [
-                    $email,
-                ],
+        $expected = [
+            'name'  => [
+                $alpha,
+                $presenceOf,
             ],
-            $validation->getValidators()
-        );
+            'email' => [
+                $email,
+            ],
+        ];
+        $actual = $validation->getValidators();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -17,11 +17,11 @@ use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class ExecInsertTest extends DatabaseTestCase
+final class ExecInsertTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -49,7 +49,7 @@ final class ExecInsertTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDbAdapterPdoInsert(): void
     {

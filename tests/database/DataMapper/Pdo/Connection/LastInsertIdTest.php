@@ -12,21 +12,21 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function date;
 use function str_replace;
 use function uniqid;
 
-final class LastInsertIdTest extends DatabaseTestCase
+final class LastInsertIdTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: lastInsertId()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLastInsertId(): void
     {
@@ -56,7 +56,7 @@ final class LastInsertIdTest extends DatabaseTestCase
         );
 
         $result = $connection->exec($sql);
-        $this->assertEquals(1, $result);
-        $this->assertEquals(2, $connection->lastInsertId());
+        $this->assertSame(1, $result);
+        $this->assertSame(2, (int)$connection->lastInsertId());
     }
 }

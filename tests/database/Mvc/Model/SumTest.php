@@ -16,13 +16,13 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class SumTest extends DatabaseTestCase
+final class SumTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -68,8 +68,8 @@ final class SumTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-30
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelSum(): void
     {
@@ -163,8 +163,8 @@ final class SumTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-30
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelSumTransaction(): void
     {

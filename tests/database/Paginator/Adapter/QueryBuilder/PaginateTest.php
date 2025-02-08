@@ -18,7 +18,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Repository;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
@@ -26,7 +26,7 @@ use Phalcon\Tests\Models\Invoices;
 
 use function is_int;
 
-final class PaginateTest extends DatabaseTestCase
+final class PaginateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -47,7 +47,7 @@ final class PaginateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testPaginatorAdapterQuerybuilderPaginate(): void
     {
@@ -95,8 +95,8 @@ final class PaginateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testPaginatorAdapterQuerybuilderPaginateGroupBy(): void
     {
@@ -166,7 +166,7 @@ final class PaginateTest extends DatabaseTestCase
      *
      * @issue  14639
      *
-     * @group  mysql
+     * @group mysql
      *
      * @throws Exception
      * @author Phalcon Team <team@phalcon.io>

@@ -17,6 +17,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\Exception as StorageException;
@@ -25,7 +26,7 @@ use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Storage\Adapter\ApcuApcuDeleteFixture;
 use Phalcon\Tests\Fixtures\Storage\Adapter\StreamUnlinkFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -33,7 +34,7 @@ use function getOptionsRedis;
 use function outputDir;
 use function uniqid;
 
-final class ClearTest extends UnitTestCase
+final class ClearTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]
@@ -59,6 +60,11 @@ final class ClearTest extends UnitTestCase
             [
                 Redis::class,
                 getOptionsRedis(),
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
                 'redis',
             ],
             [

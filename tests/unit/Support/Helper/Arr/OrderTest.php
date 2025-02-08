@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Order;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class OrderTest extends UnitTestCase
+final class OrderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Helper\Arr :: order()

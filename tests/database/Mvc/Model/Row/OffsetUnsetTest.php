@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Mvc\Model\Row;
 
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Row;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class OffsetUnsetTest extends DatabaseTestCase
+final class OffsetUnsetTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Mvc\Model\Row :: offsetUnset()
@@ -25,7 +25,7 @@ final class OffsetUnsetTest extends DatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-06-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelRowOffsetUnset(): void
     {

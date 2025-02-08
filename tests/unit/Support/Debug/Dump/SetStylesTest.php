@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use ReflectionException;
 
-final class SetStylesTest extends UnitTestCase
+final class SetStylesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Debug\Dump :: getStyle()

@@ -16,13 +16,13 @@ namespace Phalcon\Tests\Database\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class GetFirstTest extends DatabaseTestCase
+final class GetFirstTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -57,8 +57,8 @@ final class GetFirstTest extends DatabaseTestCase
      * @since  2020-05-06
      * @issue  15027
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelResultsetGetFirst(): void
     {

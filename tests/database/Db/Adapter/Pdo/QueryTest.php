@@ -15,14 +15,14 @@ namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
 use Phalcon\Db\Enum;
 use Phalcon\Db\Result\PdoResult;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function is_array;
 use function is_object;
 
-final class QueryTest extends DatabaseTestCase
+final class QueryTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -38,7 +38,7 @@ final class QueryTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-22
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbAdapterPdoQuery(): void
     {

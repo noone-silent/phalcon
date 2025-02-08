@@ -18,14 +18,16 @@ use Phalcon\Assets\Exception;
 use Phalcon\Tests\Fixtures\Assets\AssetFileExistsFixture;
 use Phalcon\Tests\Fixtures\Assets\AssetFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 use function file_get_contents;
 
 use const PHP_EOL;
 
-final class GetContentTest extends UnitTestCase
+final class GetContentTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -63,6 +65,7 @@ final class GetContentTest extends UnitTestCase
     {
         $file    = 'assets/assets/1198.css';
         $message = "Asset's content for '" . dataDir($file) . "' cannot be read";
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 

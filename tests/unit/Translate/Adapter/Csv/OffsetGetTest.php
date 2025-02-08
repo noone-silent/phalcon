@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
-final class OffsetGetTest extends UnitTestCase
+final class OffsetGetTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
 

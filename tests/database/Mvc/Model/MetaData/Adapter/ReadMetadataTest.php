@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Adapter;
 
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\AlbumMigration;
 use Phalcon\Tests\Fixtures\Migrations\AlbumPhotoMigration;
 use Phalcon\Tests\Fixtures\Migrations\PhotoMigration;
@@ -26,7 +26,7 @@ use Phalcon\Tests\Models\Photo;
 
 use function array_keys;
 
-final class ReadMetadataTest extends DatabaseTestCase
+final class ReadMetadataTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -37,12 +37,19 @@ final class ReadMetadataTest extends DatabaseTestCase
     {
         return [
             [
-                'metadataRedis',
-                self::getKeyData(),
+                'metadataApcu'
             ],
             [
-                'metadataLibmemcached',
-                self::getKeyData(),
+                'metadataLibmemcached'
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataStream',
             ],
         ];
     }
@@ -63,12 +70,11 @@ final class ReadMetadataTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
-     * @group        mysql
+     * @group mysql
      *
      */
-    public function testMvcModelMetadataGetAttributesRedis(
-        string $service,
-        array $keys
+    public function testMvcModelMetadataGetAttributes(
+        string $service
     ): void {
         $connection = self::getConnection();
         $adapter    = $this->newService($service);
@@ -133,23 +139,29 @@ final class ReadMetadataTest extends DatabaseTestCase
         $columnMap = $metadata->getColumnMap($model);
         $this->assertEquals($expected, $actual);
 
-        $service = $adapter->getAdapter();
+        if (
+            'metadataStream' !== $service &&
+            'metadataMemory' !== $service
+        ) {
+            $service = $adapter->getAdapter();
 
-        /**
-         * Check if keys exist
-         */
-        $keyKeys = array_keys($keys);
-        foreach ($keyKeys as $key) {
-            $actual = $service->has($key);
-            $this->assertTrue($actual);
-        }
+            /**
+             * Check if keys exist
+             */
+            $keys    = self::getKeyData();
+            $keyKeys = array_keys($keys);
+            foreach ($keyKeys as $key) {
+                $actual = $service->has($key);
+                $this->assertTrue($actual);
+            }
 
-        /**
-         * Check contents of the keys
-         */
-        foreach ($keys as $key => $expected) {
-            $actual = $service->get($key);
-            $this->assertSame($expected, $actual);
+            /**
+             * Check contents of the keys
+             */
+            foreach ($keys as $key => $expected) {
+                $actual = $service->get($key);
+                $this->assertSame($expected, $actual);
+            }
         }
     }
 

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ForUpdateTest extends DatabaseTestCase
+final class ForUpdateTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: forUpdate()
@@ -24,7 +24,7 @@ final class ForUpdateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaForUpdate(): void
     {

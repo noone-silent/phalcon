@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class GetSetDITest extends DatabaseTestCase
+final class GetSetDITest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -32,7 +32,7 @@ final class GetSetDITest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaGetSetDI(): void
     {

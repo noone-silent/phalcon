@@ -18,11 +18,15 @@ use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Config\Adapter\YamlExtensionLoadedFixture;
 use Phalcon\Tests\Fixtures\Config\Adapter\YamlParseFileFixture;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-use function supportDir;
+use function basename;
+use function dataDir;
+use function hash;
 
-final class ConstructTest extends UnitTestCase
+use const PATH_DATA;
+
+final class ConstructTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 

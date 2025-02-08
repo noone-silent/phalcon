@@ -265,6 +265,30 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Removes a behavior from a model
+     *
+     * @param ModelInterface $model
+     * @param string         $behaviorClass
+     */
+    public function removeBehavior(
+        ModelInterface $model,
+        string $behaviorClass
+    ): void {
+        $entityName = mb_strtolower(get_class($model));
+
+        if (isset($this->behaviors[$entityName])) {
+            foreach ($this->behaviors[$entityName] as $key => $behavior) {
+                if (get_class($behavior) === $behaviorClass) {
+                    unset($this->behaviors[$entityName][$key]);
+                }
+            }
+
+            // Reindex the array to remove gaps
+            $this->behaviors[$entityName] = array_values($this->behaviors[$entityName]);
+        }
+    }
+
+    /**
      * Setup a relation reverse many to one between two models
      *
      * @param ModelInterface $model
@@ -292,12 +316,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
-        if (is_array($referencedFields)) {
-            if (count($fields) != count($referencedFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -379,12 +401,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
-        if (is_array($referencedFields)) {
-            if (count($fields) != count($referencedFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -476,24 +496,20 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the model to the
          * intermediate model
          */
-        if (is_array($intermediateFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
          * Check if the number of fields are the same from the intermediate
          * model to the referenced model
          */
-        if (is_array($intermediateReferencedFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -590,12 +606,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
-        if (is_array($referencedFields)) {
-            if (count($fields) != count($referencedFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -687,24 +701,20 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the model to the
          * intermediate model
          */
-        if (is_array($intermediateFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
          * Check if the number of fields are the same from the intermediate
          * model to the referenced model
          */
-        if (is_array($intermediateReferencedFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -792,11 +802,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createBuilder(array | string | null $params = null): BuilderInterface
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'the services related to the ORM'
+        );
 
         /**
          * Gets Builder instance from DI container
@@ -822,11 +831,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createQuery(string $phql): QueryInterface
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'the services related to the ORM'
+        );
 
         /**
          * Create a query
@@ -2106,11 +2114,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     ): AdapterInterface {
         $service = $this->getConnectionService($model, $connectionServices);
 
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'the services related to the ORM'
+        );
 
         /**
          * Request the connection service from the DI

@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
 use PDO;
 use Phalcon\Db\Adapter\PdoFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function getOptionsMysql;
 
-final class ConnectTest extends DatabaseTestCase
+final class ConnectTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -42,7 +42,7 @@ final class ConnectTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDbAdapterPdoConnectPersistent(): void
     {

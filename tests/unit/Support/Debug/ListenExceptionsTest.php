@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ListenExceptionsTest extends UnitTestCase
+final class ListenExceptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: listenExceptions()

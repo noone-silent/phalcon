@@ -16,24 +16,20 @@ namespace Phalcon\Db\Dialect;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
+use Phalcon\Db\Dialect\Traits\TextTrait;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
-use function addcslashes;
-use function explode;
-use function is_array;
-use function is_float;
-use function is_int;
-use function join;
-use function strtoupper;
-use function substr;
+use function implode;
 
 /**
  * Generates database specific SQL for the MySQL RDBMS
  */
 class Mysql extends Dialect
 {
+    use TextTrait;
+
     /**
      * @var string
      */
@@ -54,44 +50,16 @@ class Mysql extends Dialect
         string $schemaName,
         ColumnInterface $column
     ): string {
-        $sql = "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " ADD `"
-            . $column->getName()
-            . "` "
-            . $this->getColumnDefinition($column);
-
-        if (true === $column->isNotNull()) {
-            $sql .= " NOT";
-        }
-        // This is required for some types like TIMESTAMP
-        // Query won't be executed if NULL wasn't specified
-        // Even if DEFAULT NULL was specified
-        $sql .= " NULL";
-
-        if (true === $column->hasDefault()) {
-            $defaultValue      = $column->getDefault();
-            $upperDefaultValue = strtoupper($defaultValue);
-
-            if (
-                str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
-                str_contains($upperDefaultValue, "NULL") ||
-                is_int($defaultValue) ||
-                is_float($defaultValue)
-            ) {
-                $sql .= " DEFAULT " . $defaultValue;
-            } else {
-                $sql .= " DEFAULT \""
-                    . addcslashes($defaultValue, "\"")
-                    . "\"";
-            }
-        }
-
-        if (true === $column->isAutoIncrement()) {
-            $sql .= " AUTO_INCREMENT";
-        }
-
-        return $this->checkFirstAfterPositions($sql, $column);
+        return $this->alter($tableName, $schemaName)
+            . ' ADD '
+            . $this->delimit($column->getName())
+            . " "
+            . $this->getColumnDefinition($column)
+            . $this->checkColumnIsNull($column)
+            . $this->getNullString()
+            . $this->checkColumnHasDefault($column)
+            . $this->checkColumnIsAutoIncrement($column)
+            . $this->checkColumnFirstAfterPositions($column);
     }
 
     /**
@@ -109,33 +77,16 @@ class Mysql extends Dialect
         string $schemaName,
         ReferenceInterface $reference
     ): string {
-        $sql = "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " ADD";
-
-        if ($reference->getName()) {
-            $sql .= " CONSTRAINT `" . $reference->getName() . "`";
-        }
-
-        $sql .= " FOREIGN KEY ("
-            . $this->getColumnList($reference->getColumns())
-            . ") REFERENCES "
+        return $this->alter($tableName, $schemaName)
+            . ' ADD'
+            . $this->checkReferenceConstraint($reference)
+            . ' FOREIGN KEY '
+            . $this->wrap($this->getColumnList($reference->getColumns()))
+            . ' REFERENCES '
             . $this->prepareTable($reference->getReferencedTable(), $reference->getReferencedSchema())
-            . "("
-            . $this->getColumnList($reference->getReferencedColumns())
-            . ")";
-
-        $onDelete = $reference->getOnDelete();
-        if (true !== empty($onDelete)) {
-            $sql .= " ON DELETE " . $onDelete;
-        }
-
-        $onUpdate = $reference->getOnUpdate();
-        if (true !== empty($onUpdate)) {
-            $sql .= " ON UPDATE " . $onUpdate;
-        }
-
-        return $sql;
+            . $this->wrap($this->getColumnList($reference->getReferencedColumns()))
+            . $this->checkReferenceOnDelete($reference)
+            . $this->checkReferenceOnUpdate($reference);
     }
 
     /**
@@ -153,24 +104,12 @@ class Mysql extends Dialect
         string $schemaName,
         IndexInterface $index
     ): string {
-        $sql = "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName);
+        $indexType = $index->getType() ? $index->getType() . ' ' : '';
 
-        $indexType = $index->getType();
-
-        if (true !== empty($indexType)) {
-            $sql .= " ADD " . $indexType . " INDEX ";
-        } else {
-            $sql .= " ADD INDEX ";
-        }
-
-        $sql .= "`"
-            . $index->getName()
-            . "` ("
-            . $this->getColumnList($index->getColumns())
-            . ")";
-
-        return $sql;
+        return $this->alter($tableName, $schemaName)
+            . ' ADD ' . $indexType . 'INDEX '
+            . $this->delimit($index->getName()) . ' '
+            . $this->wrap($this->getColumnList($index->getColumns()));
     }
 
     /**
@@ -188,11 +127,9 @@ class Mysql extends Dialect
         string $schemaName,
         IndexInterface $index
     ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " ADD PRIMARY KEY ("
-            . $this->getColumnList($index->getColumns())
-            . ")";
+        return $this->alter($tableName, $schemaName)
+            . ' ADD PRIMARY KEY '
+            . $this->wrap($this->getColumnList($index->getColumns()));
     }
 
     /**
@@ -210,7 +147,7 @@ class Mysql extends Dialect
         string $schemaName,
         array $definition
     ): string {
-        if (true !== isset($definition["columns"])) {
+        if (!isset($definition["columns"])) {
             throw new Exception(
                 "The index 'columns' is required in the definition array"
             );
@@ -223,143 +160,20 @@ class Mysql extends Dialect
         /**
          * Create a temporary or normal table
          */
-        if ($temporary) {
-            $sql = "CREATE TEMPORARY TABLE " . $tableName . " (\n\t";
-        } else {
-            $sql = "CREATE TABLE " . $tableName . " (\n\t";
-        }
+        $temp = $temporary ? 'TEMPORARY ' : '';
+        $sql  = 'CREATE ' . $temp . 'TABLE ' . $tableName . " (\n\t";
 
-        $createLines = [];
-        $columns     = $definition["columns"];
-        foreach ($columns as $column) {
-            $columnLine = "`"
-                . $column->getName()
-                . "` "
-                . $this->getColumnDefinition($column);
-
-            /**
-             * Add a NOT NULL clause
-             */
-            if (true === $column->isNotNull()) {
-                $columnLine .= " NOT";
-            }
-            // This is required for some types like TIMESTAMP
-            // Query won't be executed if NULL wasn't specified
-            // Even if DEFAULT NULL was specified
-            $columnLine .= " NULL";
-
-            /**
-             * Add a Default clause
-             */
-            if ($column->hasDefault()) {
-                $defaultValue      = $column->getDefault();
-                $upperDefaultValue = strtoupper($defaultValue);
-
-                if (
-                    str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
-                    str_contains($upperDefaultValue, "NULL") ||
-                    is_int($defaultValue) ||
-                    is_float($defaultValue)
-                ) {
-                    $columnLine .= " DEFAULT " . $defaultValue;
-                } else {
-                    $columnLine .= " DEFAULT \""
-                        . addcslashes($defaultValue, "\"")
-                        . "\"";
-                }
-            }
-
-            /**
-             * Add an AUTO_INCREMENT clause
-             */
-            if ($column->isAutoIncrement()) {
-                $columnLine .= " AUTO_INCREMENT";
-            }
-
-            /**
-             * Mark the column as primary key
-             */
-            if ($column->isPrimary()) {
-                $columnLine .= " PRIMARY KEY";
-            }
-
-            /**
-             * Add a COMMENT clause
-             */
-            if (true !== empty($column->getComment())) {
-                $columnLine .= " COMMENT '" . $column->getComment() . "'";
-            }
-
-            $createLines[] = $columnLine;
-        }
-
-        /**
-         * Create related indexes
-         */
-        if (isset($definition["indexes"])) {
-            $indexes = $definition["indexes"];
-            foreach ($indexes as $index) {
-                $indexName = $index->getName();
-                $indexType = $index->getType();
-
-                /**
-                 * If the index name is primary we add a primary key
-                 */
-                if ($indexName === "PRIMARY") {
-                    $indexSql = "PRIMARY KEY ("
-                        . $this->getColumnList($index->getColumns())
-                        . ")";
-                } elseif (true !== empty($indexType)) {
-                    $indexSql = $indexType
-                        . " KEY `"
-                        . $indexName
-                        . "` ("
-                        . $this->getColumnList($index->getColumns())
-                        . ")";
-                } else {
-                    $indexSql = "KEY `"
-                        . $indexName
-                        . "` ("
-                        . $this->getColumnList($index->getColumns())
-                        . ")";
-                }
-
-                $createLines[] = $indexSql;
-            }
-        }
+        $createLines = array_merge(
+            $this->getTableColumns($definition),
+            $this->getTableIndexes($definition),
+            $this->getTableReferences($definition)
+        );
 
         /**
          * Create related references
          */
-        if (isset($definition["references"])) {
-            $references = $definition["references"];
-            foreach ($references as $reference) {
-                $referenceSql = "CONSTRAINT `"
-                    . $reference->getName()
-                    . "` FOREIGN KEY ("
-                    . $this->getColumnList($reference->getColumns())
-                    . ")"
-                    . " REFERENCES "
-                    . $this->prepareTable($reference->getReferencedTable(), $reference->getReferencedSchema())
-                    . " ("
-                    . $this->getColumnList($reference->getReferencedColumns())
-                    . ")";
 
-                $onDelete = $reference->getOnDelete();
-                if (true !== empty($onDelete)) {
-                    $referenceSql .= " ON DELETE " . $onDelete;
-                }
-
-                $onUpdate = $reference->getOnUpdate();
-                if (true !== empty($onUpdate)) {
-                    $referenceSql .= " ON UPDATE " . $onUpdate;
-                }
-
-                $createLines[] = $referenceSql;
-            }
-        }
-
-        $sql .= join(",\n\t", $createLines) . "\n)";
+        $sql .= implode(",\n\t", $createLines) . "\n)";
 
         if (isset($definition["options"])) {
             $sql .= " " . $this->getTableOptions($definition);
@@ -383,7 +197,7 @@ class Mysql extends Dialect
         array $definition,
         string $schemaName = null
     ): string {
-        if (isset($definition["sql"])) {
+        if (!isset($definition["sql"])) {
             throw new Exception(
                 "The index 'sql' is required in the definition array"
             );
@@ -455,7 +269,7 @@ class Mysql extends Dialect
             . "AND RC.CONSTRAINT_SCHEMA = KCU.CONSTRAINT_SCHEMA "
             . "WHERE KCU.REFERENCED_TABLE_NAME IS NOT NULL AND ";
 
-        if (true !== empty($schemaName)) {
+        if (!empty($schemaName)) {
             $sql .= "KCU.CONSTRAINT_SCHEMA = '"
                 . $schemaName
                 . "' AND KCU.TABLE_NAME = '"
@@ -483,9 +297,12 @@ class Mysql extends Dialect
         string $schemaName,
         string $columnName
     ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " DROP COLUMN `" . $columnName . "`";
+        return $this->alterTableDrop(
+            'COLUMN',
+            $columnName,
+            $tableName,
+            $schemaName
+        );
     }
 
     /**
@@ -502,9 +319,12 @@ class Mysql extends Dialect
         string $schemaName,
         string $referenceName
     ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " DROP FOREIGN KEY `" . $referenceName . "`";
+        return $this->alterTableDrop(
+            'FOREIGN KEY',
+            $referenceName,
+            $tableName,
+            $schemaName
+        );
     }
 
     /**
@@ -521,9 +341,12 @@ class Mysql extends Dialect
         string $schemaName,
         string $indexName
     ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " DROP INDEX `" . $indexName . "`";
+        return $this->alterTableDrop(
+            'INDEX',
+            $indexName,
+            $tableName,
+            $schemaName
+        );
     }
 
     /**
@@ -538,8 +361,7 @@ class Mysql extends Dialect
         string $tableName,
         string $schemaName
     ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
+        return $this->alter($tableName, $schemaName)
             . " DROP PRIMARY KEY";
     }
 
@@ -557,13 +379,9 @@ class Mysql extends Dialect
         ?string $schemaName = null,
         bool $ifExists = true
     ): string {
-        $tableName = $this->prepareTable($tableName, $schemaName);
-
-        if (true === $ifExists) {
-            return "DROP TABLE IF EXISTS " . $tableName;
-        }
-
-        return "DROP TABLE " . $tableName;
+        return $this->drop('TABLE')
+            . $this->exists($ifExists)
+            . $this->prepareTable($tableName, $schemaName);
     }
 
     /**
@@ -580,13 +398,9 @@ class Mysql extends Dialect
         ?string $schemaName = null,
         bool $ifExists = true
     ): string {
-        $view = $this->prepareTable($viewName, $schemaName);
-
-        if (true === $ifExists) {
-            return "DROP VIEW IF EXISTS " . $view;
-        }
-
-        return "DROP VIEW " . $view;
+        return $this->drop('VIEW')
+            . $this->exists($ifExists)
+            . $this->prepareTable($viewName, $schemaName);
     }
 
     /**
@@ -602,260 +416,57 @@ class Mysql extends Dialect
         $columnSql  = $this->checkColumnTypeSql($column);
         $columnType = $this->checkColumnType($column);
 
-        switch ($columnType) {
-            case Column::TYPE_BIGINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "BIGINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_BIT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "BIT";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            case Column::TYPE_BLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "BLOB";
-                }
-
-                break;
-
-            case Column::TYPE_BOOLEAN:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYINT(1)";
-                }
-
-                break;
-
-            case Column::TYPE_CHAR:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "CHAR";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            case Column::TYPE_DATE:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DATE";
-                }
-
-                break;
-
-            case Column::TYPE_DATETIME:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DATETIME";
-                }
-
-                if ($column->getSize() > 0) {
-                    $columnSql .= $this->getColumnSize($column);
-                }
-
-                break;
-
-            case Column::TYPE_DECIMAL:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DECIMAL";
-                }
-
-                $columnSql .= $this->getColumnSizeAndScale($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_DOUBLE:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DOUBLE";
-                }
-
-                $columnSql .= $this->checkColumnSizeAndScale($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_ENUM:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "ENUM";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            case Column::TYPE_FLOAT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "FLOAT";
-                }
-
-                $columnSql .= $this->checkColumnSizeAndScale($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_INTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "INT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_JSON:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "JSON";
-                }
-
-                break;
-
-            case Column::TYPE_LONGBLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "LONGBLOB";
-                }
-
-                break;
-
-            case Column::TYPE_LONGTEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "LONGTEXT";
-                }
-
-                break;
-
-            case Column::TYPE_MEDIUMBLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "MEDIUMBLOB";
-                }
-
-                break;
-
-            case Column::TYPE_MEDIUMINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "MEDIUMINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_MEDIUMTEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "MEDIUMTEXT";
-                }
-
-                break;
-
-            case Column::TYPE_SMALLINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "SMALLINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_TEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TEXT";
-                }
-
-                break;
-
-            case Column::TYPE_TIME:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TIME";
-                }
-
-                if ($column->getSize() > 0) {
-                    $columnSql .= $this->getColumnSize($column);
-                }
-
-                break;
-
-            case Column::TYPE_TIMESTAMP:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TIMESTAMP";
-                }
-
-                if ($column->getSize() > 0) {
-                    $columnSql .= $this->getColumnSize($column);
-                }
-
-                break;
-
-            case Column::TYPE_TINYBLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYBLOB";
-                }
-
-                break;
-
-            case Column::TYPE_TINYINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_TINYTEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYTEXT";
-                }
-
-                break;
-
-            case Column::TYPE_VARCHAR:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "VARCHAR";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            default:
-                if (true === empty($columnSql)) {
-                    throw new Exception(
-                        "Unrecognized MySQL data type at column " . $column->getName()
-                    );
-                }
-
-                $typeValues = $column->getTypeValues();
-                if (true !== empty($typeValues)) {
-                    if (is_array($typeValues)) {
-                        $valueSql = "";
-                        foreach ($typeValues as $value) {
-                            $valueSql .= "\""
-                                . addcslashes($value, "\"")
-                                . "\", ";
-                        }
-
-                        $columnSql .= "("
-                            . substr($valueSql, 0, -2)
-                            . ")";
-                    } else {
-                        $columnSql .= "(\""
-                            . addcslashes($typeValues, "\"")
-                            . "\")";
-                    }
-                }
-        }
+        /**
+         * The Column checks for the correct type
+         */
+        $columnSql .= match ($columnType) {
+            Column::TYPE_BIGINTEGER    => "BIGINT",
+            Column::TYPE_BIT           => "BIT",
+            Column::TYPE_BLOB          => "BLOB",
+            Column::TYPE_BOOLEAN       => "TINYINT(1)",
+            Column::TYPE_CHAR          => "CHAR",
+            Column::TYPE_DATE          => "DATE",
+            Column::TYPE_DATETIME      => "DATETIME",
+            Column::TYPE_DECIMAL       => "DECIMAL",
+            Column::TYPE_DOUBLE        => "DOUBLE",
+            Column::TYPE_ENUM          => "ENUM",
+            Column::TYPE_FLOAT         => "FLOAT",
+            Column::TYPE_INTEGER       => "INT",
+            Column::TYPE_JSON          => "JSON",
+            Column::TYPE_LONGBLOB      => "LONGBLOB",
+            Column::TYPE_LONGTEXT      => "LONGTEXT",
+            Column::TYPE_MEDIUMBLOB    => "MEDIUMBLOB",
+            Column::TYPE_MEDIUMINTEGER => "MEDIUMINT",
+            Column::TYPE_MEDIUMTEXT    => "MEDIUMTEXT",
+            Column::TYPE_SMALLINTEGER  => "SMALLINT",
+            Column::TYPE_TEXT          => "TEXT",
+            Column::TYPE_TIME          => "TIME",
+            Column::TYPE_TIMESTAMP     => "TIMESTAMP",
+            Column::TYPE_TINYBLOB      => "TINYBLOB",
+            Column::TYPE_TINYINTEGER   => "TINYINT",
+            Column::TYPE_TINYTEXT      => "TINYTEXT",
+            default                    => "VARCHAR",
+        };
+
+        $columnSql .= match ($columnType) {
+            Column::TYPE_BIGINTEGER,
+            Column::TYPE_BIT,
+            Column::TYPE_CHAR,
+            Column::TYPE_DATETIME,
+            Column::TYPE_ENUM,
+            Column::TYPE_INTEGER,
+            Column::TYPE_MEDIUMINTEGER,
+            Column::TYPE_SMALLINTEGER,
+            Column::TYPE_TINYINTEGER,
+            Column::TYPE_TIME,
+            Column::TYPE_TIMESTAMP,
+            Column::TYPE_VARCHAR,
+            Column::TYPE_DECIMAL,
+            Column::TYPE_DOUBLE,
+            Column::TYPE_FLOAT => $this->checkColumnSizeAndScale($column)
+                . $this->checkColumnUnsigned($column),
+            default            => '',
+        };
 
         return $columnSql;
     }
@@ -885,11 +496,9 @@ class Mysql extends Dialect
      */
     public function listTables(?string $schemaName = null): string
     {
-        if (true === empty($schemaName)) {
-            return "SHOW TABLES FROM `" . $schemaName . "`";
-        }
+        $schema = empty($schemaName) ? "" : " FROM " . $this->delimit($schemaName);
 
-        return "SHOW TABLES";
+        return "SHOW TABLES" . $schema;
     }
 
     /**
@@ -901,16 +510,9 @@ class Mysql extends Dialect
      */
     public function listViews(?string $schemaName = null): string
     {
-        if (true === empty($schemaName)) {
-            return "SELECT `TABLE_NAME` AS view_name "
-                . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-                . "WHERE `TABLE_SCHEMA` = '" . $schemaName . "' "
-                . "ORDER BY view_name";
-        }
-
         return "SELECT `TABLE_NAME` AS view_name "
             . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-            . "WHERE `TABLE_SCHEMA` = DATABASE() "
+            . "WHERE `TABLE_SCHEMA` = " . $this->getMysqlSchemaString($schemaName) . " "
             . "ORDER BY view_name";
     }
 
@@ -932,64 +534,29 @@ class Mysql extends Dialect
         ColumnInterface $currentColumn = null
     ): string {
         $columnDefinition = $this->getColumnDefinition($column);
-        $sql              = "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName);
 
         if (null === $currentColumn) {
             $currentColumn = $column;
         }
 
+        $modify = ' MODIFY ';
         if ($column->getName() !== $currentColumn->getName()) {
-            $sql .= " CHANGE COLUMN `" .
-                $currentColumn->getName()
-                . "` `" .
-                $column->getName()
-                . "` "
-                . $columnDefinition;
-        } else {
-            $sql .= " MODIFY `"
-                . $column->getName()
-                . "` " . $columnDefinition;
+            $modify = ' CHANGE COLUMN '
+                . $this->delimit($currentColumn->getName())
+                . ' ';
         }
 
-        if ($column->isNotNull()) {
-            $sql .= " NOT";
-        }
-        // This is required for some types like TIMESTAMP
-        // Query won't be executed if NULL wasn't specified
-        // Even if DEFAULT NULL was specified
-        $sql .= " NULL";
-
-        if ($column->hasDefault()) {
-            $defaultValue      = $column->getDefault();
-            $upperDefaultValue = strtoupper($defaultValue);
-
-            if (
-                str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
-                str_contains($upperDefaultValue, "NULL") ||
-                is_int($defaultValue) ||
-                is_float($defaultValue)
-            ) {
-                $sql .= " DEFAULT " . $defaultValue;
-            } else {
-                $sql .= " DEFAULT \""
-                    . addcslashes($defaultValue, "\"")
-                    . "\"";
-            }
-        }
-
-        if ($column->isAutoIncrement()) {
-            $sql .= " AUTO_INCREMENT";
-        }
-
-        /**
-         * Add a COMMENT clause
-         */
-        if (true !== empty($column->getComment())) {
-            $sql .= " COMMENT '" . $column->getComment() . "'";
-        }
-
-        return $this->checkFirstAfterPositions($sql, $column);
+        return $this->alter($tableName, $schemaName)
+            . $modify
+            . $this->delimit($column->getName())
+            . ' '
+            . $columnDefinition
+            . $this->checkColumnIsNull($column)
+            . $this->getNullString()
+            . $this->checkColumnHasDefault($column)
+            . $this->checkColumnIsAutoIncrement($column)
+            . $this->checkColumnComment($column)
+            . $this->checkColumnFirstAfterPositions($column);
     }
 
     /**
@@ -1028,17 +595,7 @@ class Mysql extends Dialect
         string $tableName,
         ?string $schemaName = null
     ): string {
-        if (true !== empty($schemaName)) {
-            return "SELECT IF(COUNT(*) > 0, 1, 0) "
-                . "FROM `INFORMATION_SCHEMA`.`TABLES` "
-                . "WHERE `TABLE_NAME`= '" . $tableName . "' "
-                . "AND `TABLE_SCHEMA` = '" . $schemaName . "'";
-        }
-
-        return "SELECT IF(COUNT(*) > 0, 1, 0) "
-            . "FROM `INFORMATION_SCHEMA`.`TABLES` "
-            . "WHERE `TABLE_NAME` = '" . $tableName . "' "
-            . "AND `TABLE_SCHEMA` = DATABASE()";
+        return $this->getExistsSql('TABLES', $tableName, $schemaName);
     }
 
     /**
@@ -1051,21 +608,12 @@ class Mysql extends Dialect
      */
     public function tableOptions(string $tableName, ?string $schemaName = null): string
     {
-        $sql = "SELECT TABLES.TABLE_TYPE AS table_type,"
+        return "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
             . "TABLES.ENGINE AS engine,"
             . "TABLES.TABLE_COLLATION AS table_collation "
-            . "FROM INFORMATION_SCHEMA.TABLES WHERE ";
-
-        if (true !== empty($schemaName)) {
-            return $sql
-                . "TABLES.TABLE_SCHEMA = '"
-                . $schemaName
-                . "' AND TABLES.TABLE_NAME = '"
-                . $tableName . "'";
-        }
-
-        return $sql . "TABLES.TABLE_SCHEMA = DATABASE() "
+            . "FROM INFORMATION_SCHEMA.TABLES WHERE "
+            . "TABLES.TABLE_SCHEMA = " . $this->getMysqlSchemaString($schemaName) . " "
             . "AND TABLES.TABLE_NAME = '" . $tableName . "'";
     }
 
@@ -1077,15 +625,13 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function truncateTable(string $tableName, string $schemaName): string
-    {
-        if (true !== empty($schemaName)) {
-            $tableName = "`" . $schemaName . "`.";
-        }
+    public function truncateTable(
+        string $tableName,
+        string $schemaName = ''
+    ): string {
+        $schema = empty($schemaName) ? '' : $this->delimit($schemaName) . '.';
 
-        $tableName .= "`" . $tableName . "`";
-
-        return "TRUNCATE TABLE " . $tableName;
+        return "TRUNCATE TABLE " . $schema . $this->delimit($tableName);
     }
 
     /**
@@ -1100,123 +646,6 @@ class Mysql extends Dialect
         string $viewName,
         ?string $schemaName = null
     ): string {
-        if (true !== empty($schemaName)) {
-            return "SELECT IF(COUNT(*) > 0, 1, 0) "
-                . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-                . "WHERE `TABLE_NAME`= '" . $viewName . "' "
-                . "AND `TABLE_SCHEMA`='" . $schemaName . "'";
-        }
-
-        return "SELECT IF(COUNT(*) > 0, 1, 0) "
-            . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-            . "WHERE `TABLE_NAME`='" . $viewName . "' "
-            . "AND `TABLE_SCHEMA` = DATABASE()";
-    }
-
-    /**
-     * Generates SQL to add the table creation options
-     *
-     * @param array $definition
-     *
-     * @return string
-     */
-    protected function getTableOptions(array $definition): string
-    {
-        if (true !== isset($definition["options"])) {
-            return "";
-        }
-
-        $tableNameOptions = [];
-        $options          = $definition["options"];
-        /**
-         * Check if there is an ENGINE option
-         */
-        $engine = $options["ENGINE"] ?? "";
-        if (true !== empty($engine)) {
-            $tableNameOptions[] = "ENGINE=" . $engine;
-        }
-
-        /**
-         * Check if there is an AUTO_INCREMENT option
-         */
-        $autoIncrement = $options["AUTO_INCREMENT"] ?? "";
-        if (true !== empty($autoIncrement)) {
-            $tableNameOptions[] = "AUTO_INCREMENT=" . $autoIncrement;
-        }
-
-        /**
-         * Check if there is a TABLE_COLLATION option
-         */
-        $tableNameCollation = $options["TABLE_COLLATION"] ?? "";
-        if (true !== empty($tableNameCollation)) {
-            $collationParts     = explode("_", $tableNameCollation);
-            $tableNameOptions[] = "DEFAULT CHARSET=" . $collationParts[0];
-            $tableNameOptions[] = "COLLATE=" . $tableNameCollation;
-        }
-
-        return join(" ", $tableNameOptions);
-    }
-
-    /**
-     * Checks if the size and/or scale are present and encloses those values
-     * in parentheses if need be
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
-     */
-    private function checkColumnSizeAndScale(ColumnInterface $column): string
-    {
-        $columnSql = "";
-        if ($column->getSize()) {
-            $columnSql .= "(" . $column->getSize();
-
-            if ($column->getScale()) {
-                $columnSql .= "," . $column->getScale();
-            }
-
-            $columnSql .= ")";
-        }
-
-        return $columnSql;
-    }
-
-    /**
-     * Checks if a column is unsigned or not and returns the relevant SQL syntax
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
-     */
-    private function checkColumnUnsigned(ColumnInterface $column): string
-    {
-        if ($column->isUnsigned()) {
-            return " UNSIGNED";
-        }
-
-        return "";
-    }
-
-    /**
-     * @param string          $sql
-     * @param ColumnInterface $column
-     *
-     * @return string
-     */
-    private function checkFirstAfterPositions(
-        string $sql,
-        ColumnInterface $column
-    ): string {
-        if (true === $column->isFirst()) {
-            $sql .= " FIRST";
-        } else {
-            $afterPosition = $column->getAfterPosition();
-
-            if (true !== empty($afterPosition)) {
-                $sql .= " AFTER `" . $afterPosition . "`";
-            }
-        }
-
-        return $sql;
+        return $this->getExistsSql('VIEWS', $viewName, $schemaName);
     }
 }

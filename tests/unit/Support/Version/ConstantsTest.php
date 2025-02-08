@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Version;
 
 use Phalcon\Support\Version;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstantsTest extends UnitTestCase
+final class ConstantsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Version :: Constants

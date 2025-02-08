@@ -12,17 +12,17 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
-final class FetchAllTest extends DatabaseTestCase
+final class FetchAllTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchAll()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionFetchAll(): void
     {
@@ -32,23 +32,23 @@ final class FetchAllTest extends DatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(2);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(3);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(4);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchAll(
             'SELECT * from co_invoices'
         );
         $this->assertCount(4, $all);
 
-        $this->assertEquals(1, $all[0]['inv_id']);
-        $this->assertEquals(2, $all[1]['inv_id']);
-        $this->assertEquals(3, $all[2]['inv_id']);
-        $this->assertEquals(4, $all[3]['inv_id']);
+        $this->assertSame(1, $all[0]['inv_id']);
+        $this->assertSame(2, $all[1]['inv_id']);
+        $this->assertSame(3, $all[2]['inv_id']);
+        $this->assertSame(4, $all[3]['inv_id']);
 
         $all = $connection->yieldAll(
             'SELECT * from co_invoices'
@@ -60,9 +60,9 @@ final class FetchAllTest extends DatabaseTestCase
         }
         $this->assertCount(4, $results);
 
-        $this->assertEquals(1, $results[0]['inv_id']);
-        $this->assertEquals(2, $results[1]['inv_id']);
-        $this->assertEquals(3, $results[2]['inv_id']);
-        $this->assertEquals(4, $results[3]['inv_id']);
+        $this->assertSame(1, $results[0]['inv_id']);
+        $this->assertSame(2, $results[1]['inv_id']);
+        $this->assertSame(3, $results[2]['inv_id']);
+        $this->assertSame(4, $results[3]['inv_id']);
     }
 }

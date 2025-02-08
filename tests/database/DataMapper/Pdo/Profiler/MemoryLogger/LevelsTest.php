@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\MemoryLogger;
 
 use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class LevelsTest extends DatabaseTestCase
+final class LevelsTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array
@@ -55,9 +55,9 @@ final class LevelsTest extends DatabaseTestCase
      * @dataProvider getExamples
      * @since        2020-01-25
      *
-     * @group        pgsql
-     * @group        mysql
-     * @group        sqlite
+     * @group pgsql
+     * @group mysql
+     * @group sqlite
      */
     public function testDmPdoProfilerMemoryLoggerLevels(
         string $level
@@ -68,6 +68,6 @@ final class LevelsTest extends DatabaseTestCase
         $expected = [$level . ' message'];
         $message  = $logger->getMessages();
 
-        $this->assertEquals($expected, $message);
+        $this->assertSame($expected, $message);
     }
 }

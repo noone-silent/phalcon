@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class HavingTest extends DatabaseTestCase
+final class HavingTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -34,7 +34,7 @@ final class HavingTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaHaving(): void
     {

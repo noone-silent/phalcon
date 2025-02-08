@@ -20,29 +20,15 @@ use function is_array;
 trait ConfigTrait
 {
     /**
-     * @param array|ConfigInterface $config
+     * @param array<string, mixed>|ConfigInterface $config
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function checkConfig(array | ConfigInterface $config): array
     {
         if ($config instanceof ConfigInterface) {
             return $config->toArray();
         }
-
-        if (true !== is_array($config)) {
-            $exception = $this->getExceptionClass();
-            throw new $exception(
-                'Config must be array or Phalcon\Config\Config object'
-            );
-        }
-//
-//        if (true !== isset($config['adapter'])) {
-//            $exception = $this->getExceptionClass();
-//            throw new $exception(
-//                'You must provide "adapter" option in factory config parameter.'
-//            );
-//        }
 
         return $config;
     }
@@ -57,10 +43,10 @@ trait ConfigTrait
      */
     protected function checkConfigElement(array $config, string $element): array
     {
-        if (true !== isset($config[$element])) {
+        if (!isset($config[$element])) {
             $exception = $this->getExceptionClass();
             throw new $exception(
-                "You must provide '" . $element . "' option in factory config parameter."
+                "You must provide the '" . $element . "' option in the factory config parameter."
             );
         }
 

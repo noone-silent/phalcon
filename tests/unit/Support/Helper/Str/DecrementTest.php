@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Decrement;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class DecrementTest extends UnitTestCase
+final class DecrementTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -35,13 +37,11 @@ final class DecrementTest extends UnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: decrement() - string
      *
-     * @dataProvider getExamples
-     *
-     *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getExamples')]
     public function testSupportHelperStrDecrement(
         string $source,
         string $expected,

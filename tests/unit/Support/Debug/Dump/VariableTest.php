@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class VariableTest extends UnitTestCase
+final class VariableTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Debug\Dump :: variable() - name

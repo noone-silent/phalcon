@@ -28,14 +28,7 @@ use function is_array;
 use function is_string;
 
 /**
- * Builder
- *
- * The builder offers
- *
- * @property CollectionInterface $claims
- * @property CollectionInterface $jose
- * @property string              $passphrase
- * @property SignerInterface     $signer
+ * JWT Builder
  *
  * @link https://tools.ietf.org/html/rfc7519
  */
@@ -107,15 +100,15 @@ class Builder
     }
 
     /**
-     * @return array|string
+     * @return string[]|string
      */
-    public function getAudience()
+    public function getAudience(): array|string
     {
-        return $this->claims->get(Enum::AUDIENCE);
+        return $this->claims->get(Enum::AUDIENCE, []);
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getClaims(): array
     {
@@ -139,7 +132,7 @@ class Builder
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getHeaders(): array
     {
@@ -200,7 +193,7 @@ class Builder
      */
     public function getToken(): Token
     {
-        if (true === empty($this->passphrase)) {
+        if (empty($this->passphrase)) {
             throw new ValidatorException('Invalid passphrase (empty)');
         }
 
@@ -248,22 +241,17 @@ class Builder
      * interpretation of audience values is generally application specific.
      * Use of this claim is OPTIONAL.
      *
-     * @param mixed $audience
+     * @param array|string $audience
      *
      * @return Builder
-     * @throws ValidatorException
      */
-    public function setAudience($audience): Builder
+    public function setAudience(array|string $audience): Builder
     {
-        if (true !== is_string($audience) && true !== is_array($audience)) {
-            throw new ValidatorException('Invalid Audience');
-        }
-
-        if (true === is_string($audience)) {
+        if (is_string($audience)) {
             $audience = [$audience];
         }
 
-        return $this->setClaim(Enum::AUDIENCE, $audience);
+        return $this->addClaim(Enum::AUDIENCE, $audience);
     }
 
     /**
@@ -300,7 +288,7 @@ class Builder
             throw new ValidatorException('Invalid Expiration Time');
         }
 
-        return $this->setClaim(Enum::EXPIRATION_TIME, $timestamp);
+        return $this->addClaim(Enum::EXPIRATION_TIME, $timestamp);
     }
 
     /**
@@ -319,7 +307,7 @@ class Builder
      */
     public function setId(string $jwtId): Builder
     {
-        return $this->setClaim(Enum::ID, $jwtId);
+        return $this->addClaim(Enum::ID, $jwtId);
     }
 
     /**
@@ -334,7 +322,7 @@ class Builder
      */
     public function setIssuedAt(int $timestamp): Builder
     {
-        return $this->setClaim(Enum::ISSUED_AT, $timestamp);
+        return $this->addClaim(Enum::ISSUED_AT, $timestamp);
     }
 
     /**
@@ -349,7 +337,7 @@ class Builder
      */
     public function setIssuer(string $issuer): Builder
     {
-        return $this->setClaim(Enum::ISSUER, $issuer);
+        return $this->addClaim(Enum::ISSUER, $issuer);
     }
 
     /**
@@ -372,7 +360,7 @@ class Builder
             throw new ValidatorException('Invalid Not Before');
         }
 
-        return $this->setClaim(Enum::NOT_BEFORE, $timestamp);
+        return $this->addClaim(Enum::NOT_BEFORE, $timestamp);
     }
 
     /**
@@ -385,7 +373,7 @@ class Builder
     {
         if (
             !preg_match(
-                "/(?=^.{16,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/",
+                "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{16,}$/",
                 $passphrase
             )
         ) {
@@ -412,21 +400,6 @@ class Builder
      */
     public function setSubject(string $subject): Builder
     {
-        return $this->setClaim(Enum::SUBJECT, $subject);
-    }
-
-    /**
-     * Sets a registered claim
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return Builder
-     */
-    private function setClaim(string $name, $value): Builder
-    {
-        $this->claims->set($name, $value);
-
-        return $this;
+        return $this->addClaim(Enum::SUBJECT, $subject);
     }
 }

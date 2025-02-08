@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\Behavior;
 use DateTime;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventManager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -24,7 +24,7 @@ use Phalcon\Tests\Models\InvoicesBehavior;
 
 use function uniqid;
 
-final class TimestampableTest extends DatabaseTestCase
+final class TimestampableTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -43,7 +43,7 @@ final class TimestampableTest extends DatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-10-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorTimestampable(): void
     {
@@ -75,7 +75,7 @@ final class TimestampableTest extends DatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-10-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorTimestampableWithBeforeCreateEvent(): void
     {

@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Uncamelize;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class UncamelizeTest extends UnitTestCase
+final class UncamelizeTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -48,11 +50,10 @@ final class UncamelizeTest extends UnitTestCase
     /**
      * Tests Phalcon\Text :: uncamelize()
      *
-     * @dataProvider getSources
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getSources')]
     public function testSupportHelperStrUncamelize(
         string $value,
         string $expected,

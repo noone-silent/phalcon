@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\InterpolatorFactory;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]
@@ -42,6 +44,7 @@ final class NewInstanceTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getExamples')]
     public function testTranslateInterpolatorFactoryNewInstance(
         string $name,
         string $class

@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class DeleteTest extends DatabaseTestCase
+final class DeleteTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -34,7 +34,7 @@ final class DeleteTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-05-10
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbAdapterPdoQuery(): void
     {

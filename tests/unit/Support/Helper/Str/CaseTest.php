@@ -16,9 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\KebabCase;
 use Phalcon\Support\Helper\Str\PascalCase;
 use Phalcon\Support\Helper\Str\SnakeCase;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class CaseTest extends UnitTestCase
+final class CaseTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -101,13 +103,12 @@ final class CaseTest extends UnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: *Case()
      *
-     * @dataProvider getSources
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2022-01-02
      */
+    #[DataProvider('getSources')]
     public function testSupportHelperStrCase(
         string $class,
         string $value,

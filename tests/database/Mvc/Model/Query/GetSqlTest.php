@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
 use Phalcon\Mvc\Model\Query;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class GetSqlTest extends DatabaseTestCase
+final class GetSqlTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -56,7 +56,7 @@ final class GetSqlTest extends DatabaseTestCase
      * @since  2020-05-06
      * @issue  14657
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryGetSql(): void
     {

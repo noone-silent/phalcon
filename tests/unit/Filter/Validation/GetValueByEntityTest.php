@@ -17,9 +17,10 @@ use Phalcon\Filter\Validation;
 use Phalcon\Tests\Models\EntityWithGetter;
 use Phalcon\Tests\Models\EntityWithHook;
 use Phalcon\Tests\Models\EntityWithPublic;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetValueByEntityTest extends UnitTestCase
+final class GetValueByEntityTest extends AbstractUnitTestCase
 {
     public const NAME = 'John Doe';
 
@@ -30,7 +31,9 @@ final class GetValueByEntityTest extends UnitTestCase
         $validation = new Validation();
         $value      = $validation->getValueByEntity($entity, 'name');
 
-        $this->assertSame($entity->getName(), $value);
+        $expected = $entity->getName();
+        $actual   = $value;
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -46,7 +49,9 @@ final class GetValueByEntityTest extends UnitTestCase
         $validation = new Validation();
         $value      = $validation->getValueByEntity($entity, 'name');
 
-        $this->assertSame($entity->name, $value);
+        $expected = $entity->name;
+        $actual   = $value;
+        $this->assertSame($expected, $actual);
     }
 
     public function testFilterValidationGetValueByEntityReadAttribute(): void
@@ -56,6 +61,8 @@ final class GetValueByEntityTest extends UnitTestCase
         $validation = new Validation();
         $value      = $validation->getValueByEntity($entity, 'name');
 
-        $this->assertSame($entity->readAttribute('name'), $value);
+        $expected = $entity->readAttribute('name');
+        $actual   = $value;
+        $this->assertSame($expected, $actual);
     }
 }

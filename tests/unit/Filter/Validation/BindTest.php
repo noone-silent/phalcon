@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class BindTest extends UnitTestCase
+final class BindTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: bind()
@@ -30,22 +31,20 @@ final class BindTest extends UnitTestCase
         $user = new stdClass();
 
         $data = [
-            'name' => 'Sid',
-            'city' => 'Busan',
+            'name' => 'Leonidas',
+            'city' => 'Sparta',
         ];
 
         $validation = new Validation();
 
         $validation->bind($user, $data);
 
-        $this->assertSame(
-            $user,
-            $validation->getEntity()
-        );
+        $expected = $user;
+        $actual   = $validation->getEntity();
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame(
-            $data,
-            $validation->getData()
-        );
+        $expected = $data;
+        $actual   = $validation->getData();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersDefaultsMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Migrations\SettersMigration;
@@ -26,7 +26,7 @@ use Phalcon\Tests\Models\Setters;
 
 use function uniqid;
 
-final class UpdateTest extends DatabaseTestCase
+final class UpdateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -47,7 +47,7 @@ final class UpdateTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
@@ -114,7 +114,7 @@ final class UpdateTest extends DatabaseTestCase
      * @author Anton Vasiliev <https://github.com/Jeckerson>
      * @since  2021-08-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveViaSettersAndLocalMethod(): void
     {
@@ -167,9 +167,8 @@ final class UpdateTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-31
      *
-     * @group  mysql
-     * @group  sqlite
-     * @group  pgsql
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelUpdate(): void
     {

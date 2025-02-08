@@ -16,15 +16,16 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 use ArrayAccess;
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Tests\Fixtures\Translate\Adapter\CsvFopenFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
 

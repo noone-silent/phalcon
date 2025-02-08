@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\CustomersDefaults;
 
-final class HasChangedTest extends DatabaseTestCase
+final class HasChangedTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -38,7 +38,7 @@ final class HasChangedTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelHasChanged(): void
     {

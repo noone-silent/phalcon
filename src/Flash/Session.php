@@ -65,19 +65,24 @@ class Session extends AbstractFlash
             return $this->sessionService;
         }
 
-        if (
-            null !== $this->container &&
-            true === $this->container->has('session')
-        ) {
-            $this->sessionService = $this->container->getShared('session');
-
-            return $this->sessionService;
-        }
-
-        throw new Exception(
-            "A dependency injection container is required to access " .
+        $this->checkContainer(
+            Exception::class,
             "the 'session' service"
         );
+
+        if (true !== $this->container->has('session')) {
+            $this->checkContainer(
+                Exception::class,
+                "the 'session' service"
+            );
+        }
+
+        if (null === $this->sessionService) {
+            $this->sessionService = $this->container->getShared('session');
+        }
+
+
+        return $this->sessionService;
     }
 
     /**
@@ -93,7 +98,7 @@ class Session extends AbstractFlash
         $messages = $this->getSessionMessages(false);
 
         if (null === $type) {
-            return count($messages) > 0;
+            return !empty($messages);
         }
 
         return isset($messages[$type]);
@@ -112,7 +117,7 @@ class Session extends AbstractFlash
     {
         $messages = $this->getSessionMessages(false);
 
-        if (true !== isset($messages[$type])) {
+        if (!isset($messages[$type])) {
             $messages[$type] = [];
         }
 
@@ -158,11 +163,11 @@ class Session extends AbstractFlash
         /**
          * Session might be empty
          */
-        if (true !== is_array($messages)) {
+        if (!is_array($messages)) {
             $messages = [];
         }
 
-        if (true === is_string($type)) {
+        if (is_string($type)) {
             $return = $messages[$type] ?? [];
             if (true === $remove) {
                 unset($messages[$type]);

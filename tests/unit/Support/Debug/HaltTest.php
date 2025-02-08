@@ -15,9 +15,10 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
 use Phalcon\Support\Debug\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class HaltTest extends UnitTestCase
+final class HaltTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: halt()

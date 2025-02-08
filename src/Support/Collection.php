@@ -136,7 +136,7 @@ class Collection implements
         /**
          * If the key is not set, return the default value
          */
-        if (true !== isset($this->lowerKeys[$element])) {
+        if (!isset($this->lowerKeys[$element])) {
             return $defaultValue;
         }
 
@@ -205,9 +205,7 @@ class Collection implements
      */
     public function has(string $element): bool
     {
-        if ($this->insensitive) {
-            $element = mb_strtolower($element);
-        }
+        $element = $this->processKey($element);
 
         return isset($this->lowerKeys[$element]);
     }
@@ -250,9 +248,7 @@ class Collection implements
     public function remove(string $element): void
     {
         if ($this->has($element)) {
-            if ($this->insensitive) {
-                $element = mb_strtolower($element);
-            }
+            $element = $this->processKey($element);
 
             $value = $this->lowerKeys[$element];
 
@@ -296,9 +292,8 @@ class Collection implements
      *
      * @return string
      */
-    public function toJson(
-        int $options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
-    ): string {
+    public function toJson(int $options = 79): string
+    {
         $return = $this->phpJsonEncode($this->jsonSerialize(), $options);
 
         if (false === $return) {

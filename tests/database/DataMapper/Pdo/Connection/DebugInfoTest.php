@@ -13,16 +13,16 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class DebugInfoTest extends DatabaseTestCase
+final class DebugInfoTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: __debugInfo()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionDebugInfo(): void
     {
@@ -40,6 +40,6 @@ final class DebugInfoTest extends DatabaseTestCase
                 [],
             ],
         ];
-        $this->assertEquals($expected, $connection->__debugInfo());
+        $this->assertSame($expected, $connection->__debugInfo());
     }
 }

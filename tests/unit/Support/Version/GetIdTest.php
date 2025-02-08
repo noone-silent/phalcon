@@ -18,11 +18,13 @@ use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function is_string;
 
-final class GetIdTest extends UnitTestCase
+final class GetIdTest extends AbstractUnitTestCase
 {
     use VersionTrait;
 
@@ -54,13 +56,12 @@ final class GetIdTest extends UnitTestCase
     /**
      * Tests get()
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getExamples')]
     public function testSupportVersionGetId(
         string $class,
         string $expected

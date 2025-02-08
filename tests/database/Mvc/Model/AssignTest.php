@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Phalcon\Mvc\Model\Transaction\Manager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
 use function uniqid;
 
-final class AssignTest extends DatabaseTestCase
+final class AssignTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -40,7 +40,7 @@ final class AssignTest extends DatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelAssign(): void
     {
@@ -102,7 +102,7 @@ final class AssignTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-13
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelAssignAutoPrimary(): void
     {
@@ -127,7 +127,7 @@ final class AssignTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelAssignIncomplete(): void
     {
@@ -160,8 +160,8 @@ final class AssignTest extends DatabaseTestCase
      * @since  2020-01-29
      * @issue  https://github.com/phalcon/cphalcon/issues/15739
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelAssignWithTransaction(): void
     {

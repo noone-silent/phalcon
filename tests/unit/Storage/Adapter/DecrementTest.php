@@ -17,16 +17,18 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class DecrementTest extends UnitTestCase
+final class DecrementTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]
@@ -56,6 +58,20 @@ final class DecrementTest extends UnitTestCase
                 false,
             ],
             [
+                'Redis',
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+                -1
+            ],
+            [
+                'RedisCluster',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+                -1
+            ],
+            [
                 'Stream',
                 Stream::class,
                 [
@@ -75,7 +91,7 @@ final class DecrementTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function testStorageAdapterClear(
+    public function testStorageAdapterDecrement(
         string $className,
         string $class,
         array $options,
@@ -118,48 +134,5 @@ final class DecrementTest extends UnitTestCase
         if ('Stream' === $className) {
             $this->safeDeleteDirectory(outputDir('ph-strm'));
         }
-    }
-
-    /**
-     * Tests Phalcon\Storage\Adapter\Redis :: decrement()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterRedisDecrement(): void
-    {
-        $this->checkExtensionIsLoaded('redis');
-
-        $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
-
-        $key      = uniqid();
-        $expected = 100;
-        $actual   = $adapter->increment($key, 100);
-        $this->assertEquals($expected, $actual);
-
-        $expected = 99;
-        $actual   = $adapter->decrement($key);
-        $this->assertEquals($expected, $actual);
-
-        $actual = $adapter->get($key);
-        $this->assertEquals($expected, $actual);
-
-        $expected = 90;
-        $actual   = $adapter->decrement($key, 9);
-        $this->assertEquals($expected, $actual);
-
-        $actual = $adapter->get($key);
-        $this->assertEquals($expected, $actual);
-
-        /**
-         * unknown key
-         */
-        $key      = uniqid();
-        $expected = -9;
-        $actual   = $adapter->decrement($key, 9);
-        $this->assertEquals($expected, $actual);
     }
 }

@@ -20,9 +20,10 @@ use Phalcon\Assets\Exception;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTest extends UnitTestCase
+final class GetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: get()/set()

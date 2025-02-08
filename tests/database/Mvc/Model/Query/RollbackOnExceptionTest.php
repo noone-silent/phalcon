@@ -14,7 +14,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query;
 use PDOException;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Support\Debug;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\RollbackTestMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
@@ -25,7 +25,7 @@ use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
 
-final class RollbackOnExceptionTest extends DatabaseTestCase
+final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -33,7 +33,7 @@ final class RollbackOnExceptionTest extends DatabaseTestCase
     /**
      * @var RollbackTestMigration
      */
-    private $migration;
+    private RollbackTestMigration $migration;
 
     /**
      * Executed before each test
@@ -54,8 +54,8 @@ final class RollbackOnExceptionTest extends DatabaseTestCase
      * @author noone-silent <lominum@protonmail.com>
      * @since  2024-06-10
      * @issue  16604
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelQueryRollbackOnException(): void
     {

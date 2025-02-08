@@ -13,10 +13,10 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
-final class FetchOneTest extends DatabaseTestCase
+final class FetchOneTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array
@@ -72,7 +72,7 @@ final class FetchOneTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionFetchOne(): void
     {
@@ -82,7 +82,7 @@ final class FetchOneTest extends DatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchOne(
             'select * from co_invoices WHERE inv_id = ?',
@@ -92,7 +92,7 @@ final class FetchOneTest extends DatabaseTestCase
         );
 
         $this->assertIsArray($all);
-        $this->assertEquals(1, $all['inv_id']);
+        $this->assertSame(1, $all['inv_id']);
         $this->assertArrayHasKey('inv_id', $all);
         $this->assertArrayHasKey('inv_cst_id', $all);
         $this->assertArrayHasKey('inv_status_flag', $all);
@@ -107,9 +107,9 @@ final class FetchOneTest extends DatabaseTestCase
      * @dataProvider getBindTypes
      * @since        2020-01-25
      *
-     * @group        pgsql
-     * @group        mysql
-     * @group        sqlite
+     * @group pgsql
+     * @group mysql
+     * @group sqlite
      */
     public function testDmPdoConnectionFetchOneBindTypes(
         string $where,
@@ -121,7 +121,7 @@ final class FetchOneTest extends DatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, 'test-1');
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchOne(
             'select * from co_invoices WHERE ' . $where,
@@ -129,7 +129,7 @@ final class FetchOneTest extends DatabaseTestCase
         );
 
         $this->assertIsArray($all);
-        $this->assertEquals(1, $all['inv_id']);
+        $this->assertSame(1, $all['inv_id']);
     }
 
     /**
@@ -137,7 +137,7 @@ final class FetchOneTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionFetchOneNoResult(): void
     {
@@ -147,7 +147,7 @@ final class FetchOneTest extends DatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchOne(
             'select * from co_invoices WHERE inv_id = ?',

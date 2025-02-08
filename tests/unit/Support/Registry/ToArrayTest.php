@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ToArrayTest extends UnitTestCase
+final class ToArrayTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: toArray()

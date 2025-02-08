@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security;
 use Phalcon\Encryption\Security;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CheckTokenTest extends UnitTestCase
+final class CheckTokenTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
@@ -135,10 +135,6 @@ final class CheckTokenTest extends UnitTestCase
 
         $session->destroy();
 
-        /**
-         * @todo When Request is done, enable the below
-         */
-
         $_POST = [
             $tokenKey => $token,
         ];
@@ -151,7 +147,6 @@ final class CheckTokenTest extends UnitTestCase
 
         $actual = $security->checkToken();
         $this->assertFalse($actual);
-
 
         // Destroy token check
         $tokenKey = $security->getTokenKey();

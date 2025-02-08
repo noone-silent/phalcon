@@ -17,7 +17,6 @@ use APCUIterator;
 use DateInterval;
 use Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\PhpApcuTrait;
 
 use function is_bool;
@@ -59,8 +58,8 @@ class Apcu extends AbstractAdapter
      */
     public function clear(): bool
     {
-        $result  = true;
-        $apc     = $this->getKeys();
+        $result = true;
+        $apc    = $this->getKeys();
 
         foreach ($apc as $item) {
             if (true !== $this->phpApcuDelete($item)) {
@@ -188,7 +187,7 @@ class Apcu extends AbstractAdapter
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
-        if (true === is_int($ttl) && $ttl < 1) {
+        if (is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
         }
 

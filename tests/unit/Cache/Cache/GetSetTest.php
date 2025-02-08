@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\Exception\InvalidArgumentException;
+use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetTest extends UnitTestCase
+final class GetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cache :: get() - exception
@@ -31,7 +31,7 @@ final class GetSetTest extends UnitTestCase
      */
     public function testCacheCacheGetSetExceptionGetInvalid(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('The key contains invalid characters');
 
         $serializer = new SerializerFactory();
@@ -50,7 +50,7 @@ final class GetSetTest extends UnitTestCase
      */
     public function testCacheCacheGetSetExceptionSetInvalid(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('The key contains invalid characters');
 
         $serializer = new SerializerFactory();

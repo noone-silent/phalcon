@@ -14,16 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function sprintf;
 
 /**
- * Class GetCssSourcesTest extends UnitTestCase
+ * Class GetCssSourcesTest extends AbstractUnitTestCase
  *
  * @package Phalcon\Tests\Unit\Support\Debug
  */
-final class GetCssSourcesTest extends UnitTestCase
+final class GetCssSourcesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: getCssSources()
@@ -38,15 +39,16 @@ final class GetCssSourcesTest extends UnitTestCase
         $debug = new Debug();
         $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
 
-        $expected = sprintf(
-            '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sassets/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />' .
-            '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sassets/jquery-ui/themes/ui-lightness/theme.css" />' .
-            '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sthemes/default/style.css" />',
-            $uri
-        );
+        $expected = "
+    <link href='{$uri}assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css'
+          rel='stylesheet' 
+          type='text/css' />
+    <link href='{$uri}assets/jquery-ui/themes/ui-lightness/theme.css'
+          rel='stylesheet' 
+          type='text/css' />
+    <link href='{$uri}themes/default/style.css'
+          rel='stylesheet' 
+          type='text/css' />";
 
         $actual = $debug->getCssSources();
         $this->assertSame($expected, $actual);

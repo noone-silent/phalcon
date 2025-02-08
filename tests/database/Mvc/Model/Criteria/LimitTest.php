@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class LimitTest extends DatabaseTestCase
+final class LimitTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -44,7 +44,7 @@ final class LimitTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaLimit(): void
     {
@@ -74,7 +74,7 @@ final class LimitTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaLimitOffset(): void
     {
@@ -110,7 +110,7 @@ final class LimitTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-04
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaNoLimit(): void
     {

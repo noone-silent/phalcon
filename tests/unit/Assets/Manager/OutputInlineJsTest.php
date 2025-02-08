@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class OutputInlineJsTest extends UnitTestCase
+final class OutputInlineJsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: outputInlineJs()

@@ -94,19 +94,24 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             return $this->escaperService;
         }
 
-        if (
-            null !== $this->container &&
-            true === $this->container->has('escaper')
-        ) {
-            $this->escaperService = $this->container->getShared('escaper');
-
-            return $this->escaperService;
-        }
-
-        throw new Exception(
-            'A dependency injection container is required to access ' .
+        $this->checkContainer(
+            Exception::class,
             "the 'escaper' service"
         );
+
+        if (true !== $this->container->has('escaper')) {
+            $this->checkContainer(
+                Exception::class,
+                "the 'escaper' service"
+            );
+        }
+
+        if (null === $this->escaperService) {
+            $this->escaperService = $this->container->getShared('escaper');
+        }
+
+
+        return $this->escaperService;
     }
 
     /**
@@ -142,14 +147,14 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     {
         $content = '';
 
-        if (true !== is_array($message) && true !== is_string($message)) {
+        if (!is_array($message) && !is_string($message)) {
             throw new Exception('The message must be an array or a string');
         }
 
         /**
          * Make this an array. Same code processes string and array
          */
-        if (true !== is_array($message)) {
+        if (!is_array($message)) {
             $message = [$message];
         }
 
@@ -320,12 +325,12 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     {
         $content = $collection[$type] ?? '';
 
-        if (true !== empty($content)) {
-            if (true !== is_array($content)) {
+        if (!empty($content)) {
+            if (!is_array($content)) {
                 $content = [$content];
             }
 
-            $content = join(' ', $content);
+            $content = implode(' ', $content);
         }
 
         return $content;
@@ -346,13 +351,13 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
         $divString  = "";
         $iconString = "";
 
-        if (true !== empty($this->customTemplate)) {
+        if (!empty($this->customTemplate)) {
             return $this->customTemplate;
         }
 
-        if (true !== empty($cssClasses)) {
+        if (!empty($cssClasses)) {
             $divString = " class=\"%cssClass%\"";
-            if (true !== empty($cssIconClasses)) {
+            if (!empty($cssIconClasses)) {
                 $iconString = "<i class=\"%cssIconClass%\"></i> ";
             }
         }

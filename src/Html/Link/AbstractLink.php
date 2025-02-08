@@ -60,7 +60,7 @@ abstract class AbstractLink
         $this->href       = $href;
         $this->templated  = $this->hrefIsTemplated($href);
 
-        if (true !== empty($rel)) {
+        if (!empty($rel)) {
             $this->rels->set($rel, true);
         }
     }
@@ -203,9 +203,7 @@ abstract class AbstractLink
      */
     protected function hrefIsTemplated(string $href): bool
     {
-        return (
-            false !== mb_strpos($href, "{") &&
-            false !== mb_strpos($href, "}")
-        );
+        return false !== mb_strpos($href, "{") &&
+            false !== mb_strpos($href, "}");
     }
 }

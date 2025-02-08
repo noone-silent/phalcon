@@ -14,16 +14,16 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Enum;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class LogTest extends DatabaseTestCase
+final class LogTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\MemoryLogger :: log()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoProfilerMemoryLoggerLog(): void
     {
@@ -43,7 +43,7 @@ final class LogTest extends DatabaseTestCase
         $expected = ["f1 (123 seconds): select backtrace"];
         $message  = $logger->getMessages();
 
-        $this->assertEquals($expected, $message);
+        $this->assertSame($expected, $message);
         $this->assertSame(Enum::CUSTOM, $logger->getLogLevel());
         $this->assertSame('memory logger', $logger->getName());
         $this->assertEmpty($logger->getAdapters());

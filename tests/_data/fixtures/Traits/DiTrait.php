@@ -191,8 +191,7 @@ trait DiTrait
                 );
             case 'metadataStream':
                 return new MetaDataStream(
-                    new AdapterFactory(new SerializerFactory()),
-                    ['options' => ['storageDir' => outputDir()] ],
+                    ['metaDataDir' => outputDir()],
                 );
             case 'modelsCacheLibmemcached':
                 return new StorageLibmemcached(

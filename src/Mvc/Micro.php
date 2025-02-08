@@ -316,7 +316,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function getService(string $serviceName)
     {
-        $this->checkContainer();
+        $this->checkDiContainer();
 
         return $this->container->get($serviceName);
     }
@@ -328,7 +328,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function getSharedService(string $serviceName)
     {
-        $this->checkContainer();
+        $this->checkDiContainer();
 
         return $this->container->getShared($serviceName);
     }
@@ -347,11 +347,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         $realHandler = null;
 
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access micro services"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'micro services'
+        );
 
         try {
             $returnedValue = null;
@@ -380,7 +379,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             $matchedRoute = $router->getMatchedRoute();
 
             if (null !== $matchedRoute) {
-                if (true !== isset($this->handlers[$matchedRoute->getRouteId()])) {
+                if (!isset($this->handlers[$matchedRoute->getRouteId()])) {
                     throw new Exception(
                         "Matched route does not have an associated handler"
                     );
@@ -647,7 +646,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             }
         } catch (Throwable $ex) {
             /**
-             * Calling beforeNotFound event
+             * Calling beforeException event
              */
             $this->fireManagerEvent("micro:beforeException", $ex);
 
@@ -724,7 +723,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function hasService(string $serviceName): bool
     {
-        $this->checkContainer();
+        $this->checkDiContainer();
 
         return $this->container->has($serviceName);
     }
@@ -770,13 +769,13 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
          */
         $mainHandler = $collection->getHandler();
 
-        if (true === empty($mainHandler)) {
+        if (empty($mainHandler)) {
             throw new Exception("Collection requires a main handler");
         }
 
         $handlers = $collection->getHandlers();
 
-        if (true === empty($handlers)) {
+        if (empty($handlers)) {
             throw new Exception("There are no handlers to mount");
         }
 
@@ -812,7 +811,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             $realHandler     = [$lazyHandler, $subHandler];
             $prefixedPattern = $pattern;
 
-            if (true !== empty($prefix)) {
+            if (!empty($prefix)) {
                 $prefixedPattern = $prefix;
                 if ($pattern === "/") {
                     $prefixedPattern .= $pattern;
@@ -825,7 +824,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             $route = $this->map($prefixedPattern, $realHandler);
 
             if (
-                (is_string($methods) && true !== empty($methods)) ||
+                (is_string($methods) && !empty($methods)) ||
                 is_array($methods)
             ) {
                 $route->via($methods);
@@ -914,7 +913,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function offsetUnset(mixed $offset): void
     {
-        $this->checkContainer();
+        $this->checkDiContainer();
 
         $this->container->remove($offset);
     }
@@ -1048,7 +1047,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
         mixed $definition,
         bool $isShared = false
     ): ServiceInterface {
-        $this->checkContainer();
+        $this->checkDiContainer();
 
         return $this->container->set($serviceName, $definition, $isShared);
     }
@@ -1100,7 +1099,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * @return void
      */
-    private function checkContainer(): void
+    private function checkDiContainer(): void
     {
         if (null === $this->container) {
             $this->container = new FactoryDefault();

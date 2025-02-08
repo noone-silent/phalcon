@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Row;
 
 use Phalcon\Mvc\Model\Row;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class OffsetExistsTest extends DatabaseTestCase
+final class OffsetExistsTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Mvc\Model\Row :: offsetExists()
@@ -24,7 +24,7 @@ final class OffsetExistsTest extends DatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-06-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelRowOffsetExists(): void
     {

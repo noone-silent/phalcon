@@ -13,54 +13,29 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
+use ArrayObject;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use SplObjectStorage;
+use SplQueue;
 use stdClass;
 
 use function array_merge;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class GetSetTest extends UnitTestCase
+final class GetSetTest extends AbstractUnitTestCase
 {
-    /**
-     * Tests Phalcon\Storage\Adapter\Weak :: get()/set()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2023-07-17
-     */
-    public function cacheAdapterWeakGetSet(): void
-    {
-        $serializer = new SerializerFactory();
-        $adapter    = new Weak($serializer);
-
-        $key = uniqid();
-        $obj = new stdClass();
-        $result = $adapter->set($key, "test");
-        $this->assertFalse($result);
-        $result = $adapter->set($key, $obj);
-        $this->assertTrue($result);
-        $result = $adapter->has($key);
-        $this->assertTrue($result);
-
-        /**
-         * There is no TTl.
-         */
-        $result = $adapter->set($key, $obj, 0);
-        $this->assertTrue($result);
-
-        $result = $adapter->has($key);
-        $this->assertTrue($result);
-    }
-
     /**
      * @return array[]
      */
@@ -269,6 +244,70 @@ final class GetSetTest extends UnitTestCase
                 uniqid(),
             ],
             [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                null,
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                true,
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                false,
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                123456,
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                123.456,
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                uniqid(),
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                new stdClass(),
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'defaultSerializer' => 'Base64',
+                    ]
+                ),
+                uniqid(),
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'persistent' => true,
+                    ]
+                ),
+                uniqid(),
+            ],
+            [
                 '',
                 Stream::class,
                 [
@@ -324,6 +363,36 @@ final class GetSetTest extends UnitTestCase
                 ],
                 new stdClass(),
             ],
+            [
+                '',
+                Weak::class,
+                [],
+                new stdClass(),
+            ],
+            [
+                '',
+                Weak::class,
+                [],
+                new stdClass(),
+            ],
+            [
+                '',
+                Weak::class,
+                [],
+                new ArrayObject(),
+            ],
+            [
+                '',
+                Weak::class,
+                [],
+                new SplObjectStorage(),
+            ],
+            [
+                '',
+                Weak::class,
+                [],
+                new SplQueue(),
+            ],
         ];
     }
 
@@ -360,6 +429,80 @@ final class GetSetTest extends UnitTestCase
          * This will issue delete
          */
         $result = $adapter->set($key, $value, 0);
+        $this->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getAdapters(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\* :: get()/set()
+     *
+     * @dataProvider getAdapters
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testStorageAdapterGetSetWithZeroTtl(
+        string $class,
+        array $options,
+        string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $class($serializer, $options);
+
+        $key = uniqid();
+
+        $result = $adapter->set($key, "test");
+        $this->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $this->assertTrue($result);
+
+        /**
+         * This will issue delete
+         */
+        $result = $adapter->set($key, "test", 0);
         $this->assertTrue($result);
 
         $result = $adapter->has($key);

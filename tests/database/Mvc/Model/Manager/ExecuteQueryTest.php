@@ -18,11 +18,11 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class ExecuteQueryTest extends DatabaseTestCase
+final class ExecuteQueryTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -49,8 +49,8 @@ final class ExecuteQueryTest extends DatabaseTestCase
      * @since  2020-05-06
      * @issue  15024
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelManagerExecuteQuery(): void
     {

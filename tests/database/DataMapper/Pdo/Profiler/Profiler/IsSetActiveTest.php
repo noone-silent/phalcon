@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class IsSetActiveTest extends DatabaseTestCase
+final class IsSetActiveTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler ::
@@ -22,7 +22,7 @@ final class IsSetActiveTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoProfilerProfilerIsSetActive(): void
     {

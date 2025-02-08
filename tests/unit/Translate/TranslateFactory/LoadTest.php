@@ -14,16 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\TranslateFactory;
 
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 use function strtolower;
 
 use const PHP_OS;
 
-final class LoadTest extends UnitTestCase
+final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 

@@ -13,9 +13,9 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetSetAttributeTest extends DatabaseTestCase
+final class GetSetAttributeTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection ::
@@ -23,14 +23,14 @@ final class GetSetAttributeTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionGetSetAttribute(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertEquals(
+        $this->assertSame(
             PDO::ERRMODE_EXCEPTION,
             $connection->getAttribute(PDO::ATTR_ERRMODE)
         );
@@ -40,7 +40,7 @@ final class GetSetAttributeTest extends DatabaseTestCase
             PDO::ERRMODE_WARNING
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             PDO::ERRMODE_WARNING,
             $connection->getAttribute(PDO::ATTR_ERRMODE)
         );

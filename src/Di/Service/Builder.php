@@ -22,8 +22,6 @@ use function call_user_func;
 use function call_user_func_array;
 
 /**
- * Phalcon\Di\Service\Builder
- *
  * This class builds instances based on complex definitions
  */
 class Builder
@@ -59,7 +57,7 @@ class Builder
         /**
          * The definition has calls?
          */
-        if (true === isset($definition['calls'])) {
+        if (isset($definition['calls'])) {
             $this->checkSetterInjectionConstructor($instance);
             $paramCalls = $definition['calls'];
             $this->checkSetterInjectionParameters($paramCalls);
@@ -76,7 +74,7 @@ class Builder
                  * Create the method call
                  */
                 $methodCall = [$instance, $method["method"]];
-                if (true === isset($method['arguments'])) {
+                if (isset($method['arguments'])) {
                     $arguments = $method['arguments'];
                     $this->checkMethodArgumentsIsArray(
                         $arguments,
@@ -109,7 +107,7 @@ class Builder
         /**
          * The definition has properties?
          */
-        if (true === isset($definition['properties'])) {
+        if (isset($definition['properties'])) {
             $this->checkPropertiesInjectionConstruct($instance);
 
             $paramCalls = $definition['properties'];

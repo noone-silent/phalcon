@@ -85,26 +85,18 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected ?SerializerInterface $serializer;
 
     /**
-     * Serializer Factory
-     *
-     * @var SerializerFactory
-     */
-    protected SerializerFactory $serializerFactory;
-
-    /**
      * AbstractAdapter constructor.
      *
-     * @param SerializerFactory $factory
+     * @param SerializerFactory $serializerFactory
      * @param array             $options
      */
     protected function __construct(
-        protected SerializerFactory $factory,
+        protected SerializerFactory $serializerFactory,
         array $options = []
     ) {
         /**
          * Lets set some defaults and options here
          */
-        $this->serializerFactory = $factory;
         $this->defaultSerializer = mb_strtolower(($options['defaultSerializer']) ?? 'php');
         $this->lifetime          = $options['lifetime'] ?? 3600;
         $this->serializer        = $options['serializer'] ?? null;
@@ -325,9 +317,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         }
 
         $content = $this->doGetData($key);
-        $result  = $this->getUnserializedData($content, $defaultValue);
 
-        return $result;
+        return $this->getUnserializedData($content, $defaultValue);
     }
 
     /**
@@ -485,8 +476,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected function initSerializer(): void
     {
         if (
-            true !== empty($this->defaultSerializer) &&
-            true !== is_object($this->serializer)
+            !empty($this->defaultSerializer) &&
+            !is_object($this->serializer)
         ) {
             $className        = $this->defaultSerializer;
             $this->serializer = $this->serializerFactory->newInstance($className);

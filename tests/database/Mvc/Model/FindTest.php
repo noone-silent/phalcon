@@ -19,7 +19,7 @@ use Phalcon\Cache\Cache;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Router;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Migrations\ObjectsMigration;
@@ -36,7 +36,7 @@ use function outputDir;
 use function uniqid;
 use function var_dump;
 
-final class FindTest extends DatabaseTestCase
+final class FindTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -52,7 +52,7 @@ final class FindTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFind(): void
     {
@@ -76,7 +76,7 @@ final class FindTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-08-02
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testMvcModelFindDeprecationWarning(): void
     {
@@ -123,7 +123,7 @@ final class FindTest extends DatabaseTestCase
      * @since  2021-05-25
      * @issue  15439
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindPrivatePropertyWithRedisCache(): void
     {
@@ -243,7 +243,7 @@ final class FindTest extends DatabaseTestCase
      *
      * @see    https://github.com/phalcon/cphalcon/issues/15065
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindResultsetSecondIteration(): void
     {
@@ -296,7 +296,7 @@ final class FindTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindWithCache(): void
     {
@@ -371,14 +371,14 @@ final class FindTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-05-10
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindWithCacheException(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             "Cache service must be an object implementing " .
-            "Phalcon\Cache\CacheInterface"
+            "Psr\SimpleCache\CacheInterface"
         );
 
         $options = [
@@ -409,7 +409,7 @@ final class FindTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-06-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelFindWithSpecificColumn(): void
     {

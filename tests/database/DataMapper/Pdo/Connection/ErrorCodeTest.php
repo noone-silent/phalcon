@@ -12,16 +12,16 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ErrorCodeTest extends DatabaseTestCase
+final class ErrorCodeTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: errorCode()
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionErrorCode(): void
     {
@@ -29,6 +29,6 @@ final class ErrorCodeTest extends DatabaseTestCase
         $connection = self::getDataMapperConnection();
 
         $actual = $connection->errorCode();
-        $this->assertEquals('', $actual);
+        $this->assertNull($actual);
     }
 }

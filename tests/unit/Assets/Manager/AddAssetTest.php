@@ -17,9 +17,10 @@ use Phalcon\Assets\Asset\Css;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class AddAssetTest extends UnitTestCase
+final class AddAssetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: addAsset()

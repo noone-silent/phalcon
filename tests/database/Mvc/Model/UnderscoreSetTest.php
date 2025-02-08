@@ -13,13 +13,13 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\Model;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models;
 
-final class UnderscoreSetTest extends DatabaseTestCase
+final class UnderscoreSetTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -40,7 +40,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSet(): void
     {
@@ -90,7 +90,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetIsUsingSetters(): void
     {
@@ -143,7 +143,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetUndefinedPropertyWithAssociativeArray(): void
     {
@@ -173,7 +173,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithArrayOfBelongsToRelatedRecord(): void
     {
@@ -213,7 +213,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithArrayOfHasOneRelatedRecord(): void
     {
@@ -252,7 +252,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithBelongsToRelatedRecord(): void
     {
@@ -278,7 +278,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithHasManyRelatedRecords(): void
     {
@@ -385,7 +385,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithHasManyToManyRelatedRecords(): void
     {
@@ -428,7 +428,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithHasOneRelatedRecord(): void
     {
@@ -454,7 +454,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-11-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreSetWithHasOneThroughRelatedRecord(): void
     {

@@ -15,14 +15,14 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesMap;
 
-final class CountTest extends DatabaseTestCase
+final class CountTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
@@ -56,7 +56,7 @@ final class CountTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCount(): void
     {
@@ -162,8 +162,8 @@ final class CountTest extends DatabaseTestCase
      * @since  2023-12-26
      * @issue  https://github.com/phalcon/cphalcon/issues/16471
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelCountColumnMap(): void
     {

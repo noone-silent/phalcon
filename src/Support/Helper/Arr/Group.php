@@ -25,10 +25,10 @@ use function is_string;
 class Group
 {
     /**
-     * @param array<int|string,mixed> $collection
+     * @param array<array-key, mixed> $collection
      * @param callable|string         $method
      *
-     * @return array<int|string,mixed>
+     * @return array<array-key, mixed>
      */
     public function __invoke(array $collection, $method): array
     {
@@ -49,10 +49,8 @@ class Group
      */
     private function isCallable($method): bool
     {
-        return (
-            is_callable($method) ||
-            (is_string($method) && function_exists($method))
-        );
+        return is_callable($method) ||
+            (is_string($method) && function_exists($method));
     }
 
     /**
@@ -77,15 +75,16 @@ class Group
     }
 
     /**
-     * @param array<int|string,mixed> $filtered
+     * @param array<array-key, mixed> $filtered
      * @param callable|string         $method
      * @param mixed                   $element
      *
-     * @return array<int|string,mixed>
+     * @return array<array-key, mixed>
      */
     private function processCallable(array $filtered, $method, $element): array
     {
         if (true === $this->isCallable($method)) {
+            /** @var string $key */
             $key              = call_user_func($method, $element);
             $filtered[$key][] = $element;
         }
@@ -94,11 +93,11 @@ class Group
     }
 
     /**
-     * @param array<int|string,mixed> $filtered
+     * @param array<array-key, mixed> $filtered
      * @param callable|string         $method
      * @param mixed                   $element
      *
-     * @return array<int|string,mixed>
+     * @return array<array-key, mixed>
      */
     private function processObject(array $filtered, $method, $element): array
     {
@@ -106,19 +105,18 @@ class Group
             true !== $this->isCallable($method) &&
             true === $this->isObject($element)
         ) {
-            $key              = $element->{$method};
-            $filtered[$key][] = $element;
+            $filtered[$element->$method][] = $element;
         }
 
         return $filtered;
     }
 
     /**
-     * @param array<int|string,mixed> $filtered
+     * @param array<array-key, mixed> $filtered
      * @param callable|string         $method
      * @param mixed                   $element
      *
-     * @return array<int|string,mixed>
+     * @return array<array-key, mixed>
      */
     private function processOther(array $filtered, $method, $element): array
     {
@@ -127,8 +125,7 @@ class Group
             true !== $this->isObject($element) &&
             true === $this->isSet($method, $element)
         ) {
-            $key              = $element[$method];
-            $filtered[$key][] = $element;
+            $filtered[$element[$method]][] = $element;
         }
 
         return $filtered;

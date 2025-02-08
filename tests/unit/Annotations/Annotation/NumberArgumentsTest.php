@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Annotations\Annotation;
 
 use Phalcon\Annotations\Annotation;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NumberArgumentsTest extends UnitTestCase
+final class NumberArgumentsTest extends AbstractUnitTestCase
 {
     private $PHANNOT_T_STRING = 303;
 
@@ -49,6 +49,6 @@ final class NumberArgumentsTest extends UnitTestCase
             ],
         ]);
 
-        $this->assertSame($annotation->numberArguments(), 2);
+        $this->assertSame(2, $annotation->numberArguments());
     }
 }

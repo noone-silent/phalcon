@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Blacklist;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class BlackListTest extends UnitTestCase
+final class BlackListTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Support\Helper\Arr :: blackList()

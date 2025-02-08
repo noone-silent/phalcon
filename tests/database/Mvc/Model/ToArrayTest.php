@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Mvc\Model\Manager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -27,7 +27,7 @@ use function date;
 use function getOptionsMysql;
 use function uniqid;
 
-final class ToArrayTest extends DatabaseTestCase
+final class ToArrayTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -47,7 +47,7 @@ final class ToArrayTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelToArray(): void
     {
@@ -94,7 +94,7 @@ final class ToArrayTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelToArrayColumnMap(): void
     {
@@ -143,7 +143,7 @@ final class ToArrayTest extends DatabaseTestCase
      *
      * @issue https://github.com/phalcon/cphalcon/issues/16467
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testMvcModelToArrayExecuteColumnNotInColumnMap(): void
     {
@@ -203,7 +203,7 @@ final class ToArrayTest extends DatabaseTestCase
      *
      * @issue https://github.com/phalcon/cphalcon/issues/15361
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testMvcModelToArrayFindCastOnHydrateForceCasting(): void
     {
@@ -278,8 +278,8 @@ final class ToArrayTest extends DatabaseTestCase
      *
      * @issue https://github.com/phalcon/cphalcon/issues/1701
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelToArrayFindFirstColumns(): void
     {
@@ -323,8 +323,8 @@ final class ToArrayTest extends DatabaseTestCase
      * @since  2019-11-16
      * @issue  #11922
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelToArrayModelWithGetters(): void
     {
@@ -380,8 +380,8 @@ final class ToArrayTest extends DatabaseTestCase
      * @since  2019-11-16
      * @issue  #11922
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelToArrayModelWithGettersSerialize(): void
     {

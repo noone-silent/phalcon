@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Db\Column;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ConstantsTest extends DatabaseTestCase
+final class ConstantsTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Db\Column :: constants
@@ -24,7 +24,7 @@ final class ConstantsTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-10-26
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbColumnConstants(): void
     {

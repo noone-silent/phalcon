@@ -16,20 +16,10 @@ namespace Phalcon\Assets;
 use Phalcon\Traits\Php\FileTrait;
 
 use function hash;
+use function var_dump;
 
 /**
  * Object representation of an asset
- *
- * @property array       $attributes
- * @property bool        $isAutoVersion
- * @property bool        $filter
- * @property bool        $isLocal
- * @property string      $path
- * @property string      $sourcePath
- * @property string      $targetPath
- * @property string      $targetUri
- * @property string      $type
- * @property string|null $version
  *
  */
 class Asset implements AssetInterface
@@ -37,53 +27,19 @@ class Asset implements AssetInterface
     use FileTrait;
 
     /**
-     * @var array<string, string>
+     * @var string
      */
-    protected array $attributes;
-    /**
-     * @var bool
-     */
-    protected bool $filter;
-    /**
-     * @var bool
-     */
-    protected bool $isAutoVersion = false;
-    /**
-     * @var bool
-     */
-    protected bool $isLocal;
+    protected string $sourcePath = '';
 
     /**
      * @var string
      */
-    protected string $path;
+    protected string $targetPath = '';
 
     /**
      * @var string
      */
-    protected string $sourcePath;
-
-    /**
-     * @var string
-     */
-    protected string $targetPath;
-
-    /**
-     * @var string
-     */
-    protected string $targetUri;
-
-    /**
-     * @var string
-     */
-    protected string $type;
-
-    /**
-     * Version of resource
-     *
-     * @var string|null
-     */
-    protected ?string $version;
+    protected string $targetUri = '';
 
     /**
      * Asset constructor.
@@ -97,21 +53,14 @@ class Asset implements AssetInterface
      * @param bool                  $isAutoVersion
      */
     public function __construct(
-        string $type,
-        string $path,
-        bool $isLocal = true,
-        bool $filter = true,
-        array $attributes = [],
-        string $version = null,
-        bool $isAutoVersion = false
+        protected string $type,
+        protected string $path,
+        protected bool $isLocal = true,
+        protected bool $filter = true,
+        protected array $attributes = [],
+        protected ?string $version = null,
+        protected bool $isAutoVersion = false
     ) {
-        $this->type          = $type;
-        $this->path          = $path;
-        $this->isLocal       = $isLocal;
-        $this->filter        = $filter;
-        $this->attributes    = $attributes;
-        $this->version       = $version;
-        $this->isAutoVersion = $isAutoVersion;
     }
 
     /**
@@ -143,12 +92,16 @@ class Asset implements AssetInterface
      * @return string
      * @throws Exception
      */
-    public function getContent(string $basePath = null): string
+    public function getContent(?string $basePath = null): string
     {
         /**
          * A base path for assets can be set in the assets manager
          */
-        $completePath = $basePath . $this->checkPath('sourcePath');
+        $completePath = empty($this->sourcePath)
+            ? $this->path
+            : $this->sourcePath
+        ;
+        $completePath = $basePath . $completePath;
 
         /**
          * Local assets are loaded from the local disk
@@ -170,6 +123,7 @@ class Asset implements AssetInterface
             $this->throwException($completePath);
         }
 
+        /** @var string $content */
         return $content;
     }
 
@@ -202,7 +156,10 @@ class Asset implements AssetInterface
      */
     public function getRealSourcePath(string $basePath = null): string
     {
-        $source = $this->checkPath('sourcePath');
+        $source = empty($this->sourcePath)
+            ? $this->path
+            : $this->sourcePath;
+
         if (true === $this->isLocal) {
             /**
              * Get the real template path. If `realpath` fails it will return
@@ -223,7 +180,10 @@ class Asset implements AssetInterface
      */
     public function getRealTargetPath(string $basePath = null): string
     {
-        $target = $this->checkPath('targetPath');
+        $target = empty($this->targetPath)
+            ? $this->path
+            : $this->targetPath;
+
         if (true === $this->isLocal) {
             /**
              * A base path for assets can be set in the assets manager
@@ -255,14 +215,17 @@ class Asset implements AssetInterface
      */
     public function getRealTargetUri(): string
     {
-        $target = $this->checkPath('targetUri');
-        $ver    = $this->version;
+        $target = empty($this->targetUri)
+            ? $this->path
+            : $this->targetUri;
+
+        $ver = $this->version;
         if (true === $this->isAutoVersion && true === $this->isLocal) {
             $modTime = filemtime($this->getRealSourcePath());
             $ver     = $ver ? $ver . '.' . $modTime : $modTime;
         }
 
-        if (true !== empty($ver)) {
+        if (!empty($ver)) {
             $target = $target . "?ver=" . $ver;
         }
 
@@ -475,20 +438,6 @@ class Asset implements AssetInterface
         $this->version = $version;
 
         return $this;
-    }
-
-    /**
-     * @param string $property
-     *
-     * @return string
-     */
-    private function checkPath(string $property): string
-    {
-        if (true === empty($this->$property)) {
-            return $this->path;
-        }
-
-        return $this->$property;
     }
 
     /**

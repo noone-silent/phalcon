@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -23,7 +23,7 @@ use Phalcon\Tests\Models\Invoices;
 
 use function uniqid;
 
-final class GetRelatedTest extends DatabaseTestCase
+final class GetRelatedTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -39,7 +39,7 @@ final class GetRelatedTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-08-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetRelated(): void
     {
@@ -121,7 +121,7 @@ final class GetRelatedTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetRelatedChangeForeignKey(): void
     {

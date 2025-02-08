@@ -16,7 +16,6 @@ namespace Phalcon\Storage\Adapter;
 use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 
 use function array_key_exists;
 use function array_keys;
@@ -192,7 +191,7 @@ class Memory extends AbstractAdapter
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
-        if (true === is_int($ttl) && $ttl < 1) {
+        if (is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
         }
 

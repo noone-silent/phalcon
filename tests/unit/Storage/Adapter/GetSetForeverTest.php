@@ -17,18 +17,20 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class GetSetForeverTest extends UnitTestCase
+final class GetSetForeverTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]
@@ -37,31 +39,36 @@ final class GetSetForeverTest extends UnitTestCase
     {
         return [
             [
-                'class'     => Apcu::class,
-                'options'   => [],
-                'extension' => 'apcu',
+                Apcu::class,
+                [],
+                'apcu',
             ],
             [
-                'class'     => Libmemcached::class,
-                'options'   => getOptionsLibmemcached(),
-                'extension' => 'memcached',
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
             ],
             [
-                'class'     => Memory::class,
-                'options'   => [],
-                'extension' => '',
+                Memory::class,
+                [],
+                '',
             ],
             [
-                'class'     => Redis::class,
-                'options'   => getOptionsRedis(),
-                'extension' => 'redis',
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
             ],
             [
-                'class'     => Stream::class,
-                'options'   => [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
                     'storageDir' => outputDir(),
                 ],
-                'extension' => '',
+                '',
             ],
         ];
     }

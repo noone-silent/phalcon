@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetTitleTest extends UnitTestCase
+class SetTitleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: setTitle()

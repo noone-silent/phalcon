@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Profiler;
 
 use Phalcon\Db\Profiler\Item;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -22,7 +22,7 @@ use Phalcon\Tests\Models\Invoices;
 use function substr;
 use function uniqid;
 
-final class ProfilerTest extends DatabaseTestCase
+final class ProfilerTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -32,12 +32,12 @@ final class ProfilerTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-11-30
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDbProfilerFull(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($this);
+        $this->setDatabase();
 
         $eventsManager = $this->newService('eventsManager');
         $profiler      = $this->newService('profiler');
@@ -73,6 +73,9 @@ final class ProfilerTest extends DatabaseTestCase
         $profiles = $profiler->getProfiles();
         $this->assertCount(3, $profiles);
 
+        /**
+         * First
+         */
         /** @var Item $first */
         $first = $profiles[0];
 
@@ -92,6 +95,13 @@ final class ProfilerTest extends DatabaseTestCase
         $this->assertSame($expected, $actual);
 
         /**
+         * Active
+         */
+        $active = $profiler->getLastProfile();
+        $last = $profiles[2];
+        $this->assertSame($last, $active);
+
+        /**
          * Profile
          */
         $elapsed = $profiles[0]->getTotalElapsedSeconds()
@@ -107,5 +117,13 @@ final class ProfilerTest extends DatabaseTestCase
         $expected = 3;
         $actual   = $profiler->getNumberTotalStatements();
         $this->assertSame($expected, $actual);
+
+        /**
+         * Reset
+         */
+        $profiler->reset();
+
+        $profiles = $profiler->getProfiles();
+        $this->assertCount(0, $profiles);
     }
 }

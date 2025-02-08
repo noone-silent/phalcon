@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Friendly;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class FriendlyTest extends UnitTestCase
+final class FriendlyTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -87,13 +89,12 @@ final class FriendlyTest extends UnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: friendly()
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('getExamples')]
     public function testSupportHelperStrFriendly(
         string $text,
         string $separator,

@@ -14,16 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\TranslateFactory;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 use function uniqid;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
 
@@ -34,7 +35,7 @@ final class NewInstanceTest extends UnitTestCase
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
-     * `     */
+     */
     public function testTranslateTranslateFactoryNewInstance(): void
     {
         $interpolator = new InterpolatorFactory();

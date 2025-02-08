@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\MetaData;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersDefaultsMigration;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
@@ -33,7 +33,7 @@ use Phalcon\Tests\Models\Sources;
 
 use function uniqid;
 
-final class SaveTest extends DatabaseTestCase
+final class SaveTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
@@ -44,8 +44,8 @@ final class SaveTest extends DatabaseTestCase
      * @since  2023-08-09
      * @issue  https://github.com/phalcon/cphalcon/issues/16395
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function infiniteSaveLoop(): void
     {
@@ -83,7 +83,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-10
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSave(): void
     {
@@ -155,7 +155,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-26
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveAfterFetchingRelated(): void
     {
@@ -200,7 +200,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-10-09
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveAfterSettingEmptyRelated(): void
     {
@@ -235,7 +235,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-26
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveAfterUsingRelatedGetters(): void
     {
@@ -280,7 +280,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
@@ -323,7 +323,7 @@ final class SaveTest extends DatabaseTestCase
      *
      * @since  2019-04-28
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveCircularRelation(): void
     {
@@ -371,8 +371,8 @@ final class SaveTest extends DatabaseTestCase
      * @since  2019-11-16
      * @issue  #11922
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelSaveWithPropertySource(): void
     {
@@ -429,7 +429,7 @@ final class SaveTest extends DatabaseTestCase
      *
      * @see    https://github.com/phalcon/cphalcon/issues/15148
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveWithRelatedManyAndBelongsRecordsProperty(): void
     {
@@ -477,7 +477,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveWithRelatedRecords(): void
     {
@@ -524,7 +524,7 @@ final class SaveTest extends DatabaseTestCase
      *
      * @see    https://github.com/phalcon/cphalcon/issues/15148
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveWithRelatedRecordsProperty(): void
     {
@@ -572,7 +572,7 @@ final class SaveTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-16
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testMvcModelSaveWithSchema(): void
     {
@@ -608,7 +608,7 @@ final class SaveTest extends DatabaseTestCase
      * @since        2019-08-02
      * @dataProvider tinyintProvider
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelSaveWithTinyInt(
         string $value

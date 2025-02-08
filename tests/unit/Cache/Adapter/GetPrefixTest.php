@@ -17,20 +17,19 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_merge;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 
-final class GetPrefixTest extends UnitTestCase
+final class GetPrefixTest extends AbstractUnitTestCase
 {
-    /**
-     * @return array[]
-     */
     public static function getExamples(): array
     {
         return [
@@ -145,6 +144,38 @@ final class GetPrefixTest extends UnitTestCase
                 'redis',
             ],
             [
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                    ]
+                ),
+                'ph-redc-',
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'prefix' => '',
+                    ]
+                ),
+                '',
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'prefix' => 'my-prefix',
+                    ]
+                ),
+                'my-prefix',
+                'redis',
+            ],
+            [
                 Stream::class,
                 [
                     'storageDir' => outputDir(),
@@ -218,6 +249,6 @@ final class GetPrefixTest extends UnitTestCase
         $adapter    = new $class($serializer, $options);
 
         $actual = $adapter->getPrefix();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

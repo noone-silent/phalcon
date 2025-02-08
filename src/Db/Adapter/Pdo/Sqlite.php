@@ -82,7 +82,7 @@ class Sqlite extends PdoAdapter
      */
     public function connect(array $descriptor = []): void
     {
-        if (true === empty($descriptor)) {
+        if (empty($descriptor)) {
             $descriptor = $this->descriptor;
         }
 
@@ -90,7 +90,7 @@ class Sqlite extends PdoAdapter
             $descriptor["dsn"] = $descriptor["dbname"];
 
             unset($descriptor["dbname"]);
-        } elseif (true !== isset($descriptor["dsn"])) {
+        } elseif (!isset($descriptor["dsn"])) {
             throw new Exception(
                 "The database must be specified with either 'dbname' or 'dsn'."
             );
@@ -335,11 +335,11 @@ class Sqlite extends PdoAdapter
              * When field is empty default value is null
              */
             if (
-                true !== empty($field[4]) &&
+                !empty($field[4]) &&
                 0 !== strcasecmp($field[4], "null")
             ) {
                 $definition["default"] = preg_replace(
-                    "/^('|')$/",
+                    "/^'|'$/",
                     "",
                     $field[4]
                 );
@@ -379,7 +379,7 @@ class Sqlite extends PdoAdapter
         foreach ($records as $index) {
             $keyName = $index["name"];
 
-            if (true !== isset($indexes[$keyName])) {
+            if (!isset($indexes[$keyName])) {
                 $indexes[$keyName] = [];
             }
 

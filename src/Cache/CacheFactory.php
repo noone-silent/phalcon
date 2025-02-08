@@ -18,6 +18,7 @@ use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Creates a new Cache class
@@ -70,6 +71,9 @@ class CacheFactory
     public function load(array | ConfigInterface $config): CacheInterface
     {
         $config  = $this->checkConfig($config);
+        $this->checkConfigElement($config, 'adapter');
+
+        /** @var string $name */
         $name    = $config['adapter'];
         $options = $config['options'] ?? [];
 
