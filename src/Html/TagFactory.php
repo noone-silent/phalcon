@@ -119,11 +119,6 @@ class TagFactory
     use FactoryTrait;
 
     /**
-     * @var array
-     */
-    protected array $services = [];
-
-    /**
      * @var EscaperInterface
      */
     private EscaperInterface $escaper;
@@ -181,12 +176,7 @@ class TagFactory
      */
     public function newInstance(string $name)
     {
-        if (!isset($this->services[$name])) {
-            $definition            = $this->getService($name);
-            $this->services[$name] = new $definition($this->escaper);
-        }
-
-        return $this->services[$name];
+        return $this->getCachedInstance($name, $this->escaper);
     }
 
     /**
@@ -196,7 +186,7 @@ class TagFactory
     public function set(string $name, $callable): void
     {
         $this->mapper[$name] = $callable;
-        unset($this->services[$name]);
+        unset($this->instances[$name]);
     }
 
     /**
