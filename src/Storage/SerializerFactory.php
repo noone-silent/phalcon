@@ -51,11 +51,7 @@ class SerializerFactory
      */
     public function newInstance(string $name): SerializerInterface
     {
-        $definition = $this->getService($name);
-        /** @var SerializerInterface $serializer */
-        $serializer = new $definition();
-
-        return $serializer;
+        return $this->getCachedInstance($name);
     }
 
     /**
