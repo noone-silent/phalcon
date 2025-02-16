@@ -142,7 +142,7 @@ class HelperFactory
     use FactoryTrait;
 
     /**
-     * FactoryTrait constructor.
+     * Constructor.
      *
      * @param array $services
      */
@@ -173,9 +173,7 @@ class HelperFactory
      */
     public function newInstance(string $name)
     {
-        $definition = $this->getService($name);
-
-        return new $definition();
+        return $this->getCachedInstance($name);
     }
 
     /**

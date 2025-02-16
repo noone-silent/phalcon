@@ -45,6 +45,8 @@ class TranslateFactory
     use ConfigTrait;
     use FactoryTrait;
 
+    private array $instances = [];
+
     /**
      * AdapterFactory constructor.
      *
@@ -88,11 +90,7 @@ class TranslateFactory
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
-        $definition = $this->getService($name);
-        /** @var AdapterInterface $translate */
-        $translate = new $definition($this->interpolator, $options);
-
-        return $translate;
+        return $this->getCachedInstance($name, $this->interpolator, $options);
     }
 
     /**

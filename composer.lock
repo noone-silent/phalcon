@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aceb068369aae1abd0c19236179116f4",
+    "content-hash": "8547bc2e2fa57668f0ef94f2d52218c7",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -163,22 +163,22 @@
         },
         {
             "name": "phalcon/traits",
-            "version": "2.0.4",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/traits.git",
-                "reference": "66d045abc8fc07c530e84173aa1de299898a6992"
+                "reference": "978b7fd9a4756ce66e3c05c146438cd44c981379"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/traits/zipball/66d045abc8fc07c530e84173aa1de299898a6992",
-                "reference": "66d045abc8fc07c530e84173aa1de299898a6992",
+                "url": "https://api.github.com/repos/phalcon/traits/zipball/978b7fd9a4756ce66e3c05c146438cd44c981379",
+                "reference": "978b7fd9a4756ce66e3c05c146438cd44c981379",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": ">=8.0 <9.0"
+                "php": ">=8.1 <9.0"
             },
             "require-dev": {
                 "codeception/codeception": "^5.0",
@@ -215,7 +215,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/traits/issues",
-                "source": "https://github.com/phalcon/traits/tree/2.0.4"
+                "source": "https://github.com/phalcon/traits/tree/3.0.0"
             },
             "funding": [
                 {
@@ -227,7 +227,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-12-28T22:42:14+00:00"
+            "time": "2025-02-11T15:46:57+00:00"
         },
         {
             "name": "psr/container",

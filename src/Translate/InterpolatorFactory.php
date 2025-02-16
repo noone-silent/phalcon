@@ -43,11 +43,7 @@ class InterpolatorFactory
      */
     public function newInstance(string $name): InterpolatorInterface
     {
-        $definition = $this->getService($name);
-        /** @var InterpolatorInterface $interpolator */
-        $interpolator = new $definition($definition);
-
-        return $interpolator;
+        return $this->getCachedInstance($name);
     }
 
     /**
